@@ -6,7 +6,7 @@
 <body>
     <h2><%= "Cadastrar Usuario" %></h2>
 
-    <form action='${pageContext.request.contextPath}/cadastrar' method="post">
+    <form action="seuServlet" method="post">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required><br><br>
 

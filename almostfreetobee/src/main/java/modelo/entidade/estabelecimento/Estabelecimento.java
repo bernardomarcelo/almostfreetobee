@@ -17,7 +17,13 @@ public class Estabelecimento {
     private Foto foto;
 
 
-    public Estabelecimento() {}
+    public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, String telefone, String horarioFuncionamento) {
+    	setNome(nome);
+    	setTipoEstabelecimento(tipoEstabelecimento);
+    	setTelefone(telefone);
+    	setHorarioFuncionamento(horarioFuncionamento);
+    	
+    }
     
     public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj, String email, String telefone, String horarioFuncionamento, Foto foto) {
         setId(id);

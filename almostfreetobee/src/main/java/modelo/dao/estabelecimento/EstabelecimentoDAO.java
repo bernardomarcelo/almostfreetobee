@@ -32,6 +32,8 @@ public interface EstabelecimentoDAO {
 		
 		void editarFotoEstabelecimento(Estabelecimento estabelecimento, Foto novasFoto);
 
+		List <Estabelecimento >pesquisarEstabelecimento (String nomePesquisa);
+		
 		List<Estabelecimento> recuperarEstabelecimentoUnico(Long id);
 		
 		List<Estabelecimento> recuperarEstabelecimentos();

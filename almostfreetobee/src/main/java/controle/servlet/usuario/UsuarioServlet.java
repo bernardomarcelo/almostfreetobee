@@ -17,8 +17,8 @@ import modelo.dao.usuario.UsuarioDAOImpl;
 import modelo.entidade.usuario.Usuario;
 
 
-//@WebServlet(urlPatterns = { "/cadastrar", "/entrar", "/sair" })
-@WebServlet ("/")
+//@WebServlet(urlPatterns = { "/almostfreetobee/cadastrar", "/almostfreetobee", "/sair" })
+@WebServlet("/")
 public class UsuarioServlet extends HttpServlet {
 
     //private static final long serialVersionUID = 1L;
@@ -38,14 +38,21 @@ public class UsuarioServlet extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getServletPath();
+        
 
         switch (action) {
 
-            case "/exibirPerfilUsuario":
+       
+        
+        case "/cadastrar":
+			cadastrarUsuario(request, response);
+			break;
+        
+        	case "/exibirPerfilUsuario":
                 exibirPerfilUsuario(request, response);
                 break;
 
-            case "/login-usuario":
+            case "/":
                 loginUsuario(request, response);
                 break;
 
@@ -68,7 +75,19 @@ public class UsuarioServlet extends HttpServlet {
     }
 
 
-    protected void loginUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+    	String nome = request.getParameter("nome");
+		String sobrenome = request.getParameter("sobrenome");
+		String apelido = request.getParameter("apelido");
+		String email = request.getParameter("email");
+		String senha = request.getParameter("senha");
+		dao.inserirUsuario(new Usuario(nome, sobrenome, apelido, email, senha));
+		response.sendRedirect("cadastroUsuario.jsp");
+	}
+	
+
+	protected void loginUsuario(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String senha = request.getParameter("senha");
 
@@ -82,7 +101,7 @@ public class UsuarioServlet extends HttpServlet {
             response.sendRedirect("exibirPerfilUsuario?id=" + usuario.getId());
         } else {
             request.setAttribute("erro", "Email ou senha inválidos.");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("login-usuario.jsp");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("homePage.jsp");
             dispatcher.forward(request, response);
         }
     }
@@ -94,7 +113,7 @@ public class UsuarioServlet extends HttpServlet {
         if (session != null) {
             session.invalidate();
         }
-        response.sendRedirect(request.getContextPath() + "/index.jsp");
+        response.sendRedirect(request.getContextPath() + "/.jsp");
     }
 
         protected void exibirPerfilUsuario(HttpServletRequest request, HttpServletResponse response)
@@ -110,7 +129,7 @@ public class UsuarioServlet extends HttpServlet {
 
         }
 
-    private void mostrarTelaLoginUsuario(HttpServletRequest request, HttpServletResponse response)
+    /*private void mostrarTelaLoginUsuario(HttpServletRequest request, HttpServletResponse response)
 
             throws ServletException, IOException {
 
@@ -118,5 +137,5 @@ public class UsuarioServlet extends HttpServlet {
         dispatcher.forward(request, response);
 
     }
-
+*/
 }
