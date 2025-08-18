@@ -21,14 +21,14 @@ public class Usuario {
 
     }
 
-
-    public Usuario(String senha, String apelido, String sobrenome, String nome, String email) {
-        setSenha(senha);
-        setApelido(apelido);
-        setSobrenome(sobrenome);
+    public Usuario(String nome, String sobrenome, String apelido, String email, String senha) {
         setNome(nome);
+        setSobrenome(sobrenome);
+        setApelido(apelido);
         setEmail(email);
+        setSenha(senha);
     }
+
 
 
    public Usuario(String senha, String apelido, String sobrenome, String pronome, String email, String nome, Long id) {

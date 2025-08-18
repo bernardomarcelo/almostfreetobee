@@ -281,7 +281,7 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 				String horario = resultado.getString("horario_estabelecimento");
 				
 				/*Long idFoto = resultado.getLong("id_foto");
-				String nomeArquivo = resultado.getString("caminho_arquivo_foto");
+				String nomeArquivo = resultado.getString("caminho_arquivo_foto");rx
 				byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
 				
 						

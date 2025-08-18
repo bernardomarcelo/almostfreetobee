@@ -6,7 +6,7 @@
     <title>Iniciar Sessão</title>
 </head>
 <body>
-        <form action='${pageContext.request.contextPath}' method='post'>
+        <form action='login' method='post'>
             <label for='email'>E-mail*</label>
             <input type='text' name='email' required placeholder='Insira seu endereço de e-mail' size='25'>
             <br><br>
@@ -17,6 +17,6 @@
             <button type='reset'>Limpar</button>
         </form> 	
         <br>
-        <p>Não possui uma conta? <a href='/almostfreetobee/cadastrar'>Cadastre-se</a></p>
+        <p>Não possui uma conta? <a href='/almostfreetobee/novo'>Cadastre-se</a></p>
 </body>
 </html>

@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html>
 <head>
     <title>Formulário de Cadastro</title>
@@ -6,7 +7,7 @@
 <body>
     <h2><%= "Cadastrar Usuario" %></h2>
 
-    <form action='${pageContext.request.contextPath}/cadastrar' method="post">
+    <form action='cadastrar' method="post">
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required><br><br>
 

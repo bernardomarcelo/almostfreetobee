@@ -59,7 +59,11 @@ public class Estabelecimento {
         setHorarioFuncionamento(horarioFuncionamento);
     }
 
-    public Long getId() {
+    public Estabelecimento() {
+		
+	}
+
+	public Long getId() {
 
         return id;
     }
