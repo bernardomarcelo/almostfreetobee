@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,14 +15,15 @@ import modelo.dao.endereco.EnderecoDAO;
 import modelo.dao.endereco.EnderecoDAOImpl;
 import modelo.dao.estabelecimento.EstabelecimentoDAO;
 import modelo.dao.estabelecimento.EstabelecimentoDAOImpl;
+import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
-
-@WebServlet("/PerfilEstabelecimento")
+@WebServlet(urlPatterns = { "/estabelecimento/exibir-perfil", "/estabelecimento/novo", "/estabelecimento/cadastrar", "/estabelecimento/listar" })
+//@WebServlet("/estabelecimento/*")
 public class EstabelecimentoServlet extends HttpServlet {
 	
-	private static final long serialVersionUID = 1L;
+	//private static final long serialVersionUID = 1L;
 	private EstabelecimentoDAO daoEstabelecimento;
 	private EnderecoDAO daoEndereco;
 
@@ -44,27 +46,59 @@ public class EstabelecimentoServlet extends HttpServlet {
 			
 			switch (action) {
 				
-			/*case "/inserir":
+			case "/estabelecimento/cadastrar":
 				inserirEstabelecimento(request, response);
 				break;
-			*/	
+				
+			case "/estabelecimento/novo":
+			TelaInserirEstabelecimento(request, response);
+				break;
 			
-			case "/PerfilEstabelecimento":
+			case "/estabelecimento/exibir-perfil":
                 exibirPerfil(request, response);
                 break;
                 
-			//default:
-				//listarContatos(request, response);
-				//break;
+			case "/pesquisar-estabelecimento":
+				pesquisarEstabelecimento(request, response);
+				break;
+			
+			case "/estabelecimento/listar":
+				listarEstabelecimentos(request, response);
+				break;
+			default:
+				RequestDispatcher dispatcher = request.getRequestDispatcher("erro.jsp");
+				dispatcher.forward(request, response);
+				break;
 			}
 
-		} catch (SQLException ex) {
-			throw new ServletException(ex);
+		} catch (SQLException e) {
+			throw new ServletException(e);
 		}
 	}
 	
 	
-	private void inserirEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException {
+	private void TelaInserirEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroEstabelecimento.jsp");
+		dispatcher.forward(request, response);
+	}
+
+	private void pesquisarEstabelecimento(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
+
+	private void listarEstabelecimentos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentos();
+
+		request.setAttribute("estabelecimento", estabelecimentos);
+
+		request.getRequestDispatcher("/listaEstabelecimentos.jsp").forward(request, response);
+		
+	}
+
+	private void inserirEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		
 		String nome = request.getParameter("nome");
 		String tipoString = request.getParameter("tipo");
@@ -91,7 +125,8 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura);
 		daoEstabelecimento.inserirEstabelecimento(estabelecimento, idEndereco);
-		response.sendRedirect("listar");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/PaginaVerificacao.jsp");
+		dispatcher.forward(request, response);
 	}
 
 	private void exibirPerfil(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -103,6 +138,6 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 
 	    request.setAttribute("estabelecimento", estabelecimento);
-	    request.getRequestDispatcher("/PerfilEstabelecimento.jsp").forward(request, response);
+	    request.getRequestDispatcher("exibirPerfilEstabelecimento.jsp").forward(request, response);
 	}
 }

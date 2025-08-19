@@ -20,6 +20,7 @@
 		</style>
 </head>
 <body>
-									<h1>ERRO</h1>
+									<h1>ERRO 404</h1>
+									<h2>PÁGINA NÃO ENCONTRADA</h2>
 </body>
 </html>

@@ -10,6 +10,8 @@
 
 <h1>Homepage</h1>
 
+<p>Dê uma olhada em seu perfil!<a href='/almostfreetobee/perfil'>Seu perfil!</a></p>
+
 
 
 </body>

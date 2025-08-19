@@ -15,7 +15,6 @@ import modelo.dao.usuario.UsuarioDAO;
 import modelo.dao.usuario.UsuarioDAOImpl;
 import modelo.entidade.usuario.Usuario;
 
-
 //@WebServlet(urlPatterns = { "/almostfreetobee/cadastrar", "/almostfreetobee", "/sair" })
 @WebServlet("/")
 public class UsuarioServlet extends HttpServlet {
@@ -59,15 +58,14 @@ public class UsuarioServlet extends HttpServlet {
 		case "/logoutUsuario":
 			logoutUsuario(request, response);
 			break;
-			
-		case "/exibirPerfilUsuario":
-		    exibirPerfilUsuario(request, response);
-		    break;
-		    
+
+		case "/perfil":
+			exibirTelaPerfilUsuario(request, response);
+			break;
+
 		case "/homepage":
 			mostrarTelaHomepage(request, response);
 			break;
-
 
 		/*
 		 * case "/entrar": conectarUsuario(request, response); break;
@@ -76,15 +74,17 @@ public class UsuarioServlet extends HttpServlet {
 		 */
 
 		default:
-			 request.getRequestDispatcher("erro.jsp").forward(request, response);
+			request.getRequestDispatcher("erro.jsp").forward(request, response);
 			break;
 		}
+
 	}
 
-	private void mostrarTelaHomepage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void mostrarTelaHomepage(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("homepage.jsp");
 		dispatcher.forward(request, response);
-		
+
 	}
 
 	private void mostrarTelaLogin(HttpServletRequest request, HttpServletResponse response)
@@ -119,7 +119,6 @@ public class UsuarioServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String senha = request.getParameter("senha");
 
-		
 		Usuario usuario = dao.buscarPorEmailESenha(email, senha);
 
 		if (usuario != null) {
@@ -142,16 +141,18 @@ public class UsuarioServlet extends HttpServlet {
 		response.sendRedirect("login");
 	}
 
-	protected void exibirPerfilUsuario(HttpServletRequest request, HttpServletResponse response)
+	protected void exibirTelaPerfilUsuario(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String idParam = request.getParameter("id");
-		Long id;
-		id = Long.parseLong(idParam);
-		HttpSession session = request.getSession();
-		Usuario usuario = dao.recuperarUsuario(id);
-		request.setAttribute("usuario", usuario);
-		request.getRequestDispatcher("exibirPerfilUsuario.jsp").forward(request, response);
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+			if (usuarioLogado != null) {
+				request.setAttribute("usuario", usuarioLogado);
+			}
+		}
+		RequestDispatcher dispatcher = request.getRequestDispatcher("exibirPerfilUsuario.jsp");
+		dispatcher.forward(request, response);
 
 	}
 

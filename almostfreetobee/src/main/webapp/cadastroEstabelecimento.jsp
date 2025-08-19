@@ -10,7 +10,7 @@
 
 <h2>Free to Bee</h2>
 
-<form action ="inserir" method="post">
+<form action ="cadastrar" method="post">
 
         <h3>Informações gerais</h3>
 	    <label>Nome do estabelecimento*</label>
