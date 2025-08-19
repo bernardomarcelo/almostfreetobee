@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 
-@WebServlet("/PerfilEstabelecimento")
+@WebServlet(urlPatterns = {"/PerfilEstabelecimento", "/pesquisar-estabelecimento", "/realizar-pesquisa"})
 public class EstabelecimentoServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -52,10 +53,18 @@ public class EstabelecimentoServlet extends HttpServlet {
 			case "/PerfilEstabelecimento":
                 exibirPerfil(request, response);
                 break;
+            
+			case "/pesquisar-estabelecimento":
+				mostrarTelaPesquisaEstabelecimento(request, response);
+				break;
+				
+			case "/realizar-pesquisa":
+				pesquisarEstabelecimento(request, response);
+				break;
                 
-			//default:
-				//listarContatos(request, response);
-				//break;
+			default:
+				 request.getRequestDispatcher("erro.jsp").forward(request, response);
+				break;
 			}
 
 		} catch (SQLException ex) {
@@ -105,4 +114,25 @@ public class EstabelecimentoServlet extends HttpServlet {
 	    request.setAttribute("estabelecimento", estabelecimento);
 	    request.getRequestDispatcher("/PerfilEstabelecimento.jsp").forward(request, response);
 	}
+	
+	private void pesquisarEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws IOException, SQLException, ServletException {
+		
+		String nome = request.getParameter("recuperarEstabelecimento");
+		List<Estabelecimento> estabelecimentoRecuperados = daoEstabelecimento.pesquisarEstabelecimento(nome);
+		
+		request.setAttribute("estabelecimentos", estabelecimentoRecuperados);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("listar-estabelecimento.jsp");
+		dispatcher.forward(request, response);
+		
+		
+	}
+	
+	private void mostrarTelaPesquisaEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("listar-estabelecimento.jsp");
+		dispatcher.forward(request, response);
+
+	}
+	
 }

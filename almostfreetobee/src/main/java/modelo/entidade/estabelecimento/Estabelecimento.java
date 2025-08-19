@@ -63,6 +63,14 @@ public class Estabelecimento {
 		
 	}
 
+	public Estabelecimento(String nome, String telefone, String horario) {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Estabelecimento(String nome, String telefone) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long getId() {
 
         return id;

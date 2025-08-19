@@ -9,9 +9,9 @@
     
     <h2><strong>Endereço</strong></h2>
     <p>
-        ${estabelecimento.endereco.logradouro}, 
-        ${estabelecimento.endereco.bairro}, 
-        ${estabelecimento.endereco.cidade}, 
+        Logradouro: ${estabelecimento.endereco.logradouro}, 
+        Bairro: ${estabelecimento.endereco.bairro}, 
+        Cidade: ${estabelecimento.endereco.cidade}, 
         CEP: ${estabelecimento.endereco.cep}
     </p>
     

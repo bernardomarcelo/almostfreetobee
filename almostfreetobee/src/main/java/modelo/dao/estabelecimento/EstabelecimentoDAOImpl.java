@@ -213,8 +213,8 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					
 			selectEstabelecimentos = conexao.prepareStatement("select estabelecimento.*, foto.*, endereco.* "
 					+ "from foto right join estabelecimento "
-					+ "on foto.id_foto = estabelecimento.id_foto_estabelecimento left join endereco "
-					+ "on estabelecimento.id_endereco_estabelecimento = endereco.id_endereco;");
+					+ "on foto.id_foto = estabelecimento.id_foto_estabelecimento* INNER JOIN endereco "
+					+ "on estabelecimento.id_endereco = endereco.id_endereco;");
 			
 			ResultSet resultado = selectEstabelecimentos.executeQuery();
 			
@@ -262,46 +262,47 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		
 		try{
 					
-			selectEstabelecimentos = conexao.prepareStatement("select estabelecimento.*, foto.*, endereco.* "
-					+ "from foto right join estabelecimento "
-					+ "on foto.id_foto = estabelecimento.id_foto_estabelecimento left join endereco "
-					+ "on estabelecimento.id_endereco_estabelecimento = endereco.id_endereco where nome = ?;");
+			selectEstabelecimentos = conexao.prepareStatement("SELECT estabelecimento.*, endereco.* FROM estabelecimento INNER JOIN endereco ON estabelecimento.id_endereco = endereco.id_endereco WHERE nome_estabelecimento = ?;");
 			
 			
-			
-			selectEstabelecimentos.setString(1,"nome_estabelecimento");
+			selectEstabelecimentos.setString(1, nomePesquisa);
 			ResultSet resultado = selectEstabelecimentos.executeQuery();
 			
 			
 			while(resultado.next()) {
 				
 				String nome = resultado.getString("nome_estabelecimento");
-				TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
+				String email = resultado.getString("email_estabelecimento");
+				//TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
 				String telefone = resultado.getString("telefone_estabelecimento");
-				String horario = resultado.getString("horario_estabelecimento");
+				//String horario = resultado.getString("horario_estabelecimento");
 				
 				/*Long idFoto = resultado.getLong("id_foto");
 				String nomeArquivo = resultado.getString("caminho_arquivo_foto");rx
 				byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
-				
+				*/
+			
 						
-				String estado = resultado.getString("estado");
-				String cidade = resultado.getString("cidade");
-				String bairro = resultado.getString("bairro");
-				int cep = resultado.getInt("cep");
-				String logradouro = resultado.getString("logradouro");						 
+				String estado = resultado.getString("estado_endereco");
+				String cidade = resultado.getString("cidade_endereco");
+				String bairro = resultado.getString("bairro_endereco");
+				int cep = resultado.getInt("cep_endereco");
+				String logradouro = resultado.getString("logradouro_endereco");						 
 				
-				Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
+				//Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
 						
 				Endereco endereco = new Endereco(estado, cidade, bairro, cep, logradouro);
-					*/
+					
 				//estabelecimentosRecuperados.add(new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horario, foto));
-				estabelecimentosRecuperados.add(new Estabelecimento(nome, tipo, telefone, horario));
+				estabelecimentosRecuperados.add(new Estabelecimento(nome, email, telefone));
+				
 			}
 			
 		}catch(SQLException erro) {
 			erro.printStackTrace();
 		}
+		
+	
 		
 		
 		return estabelecimentosRecuperados;
