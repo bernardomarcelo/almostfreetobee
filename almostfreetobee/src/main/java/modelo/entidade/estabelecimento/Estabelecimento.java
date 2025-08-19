@@ -63,8 +63,11 @@ public class Estabelecimento {
 		
 	}
 
-	public Estabelecimento(String nome, String telefone, String horario) {
-		// TODO Auto-generated constructor stub
+	public Estabelecimento(String nome, String telefone, String email) {
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);
+
 	}
 
 	public Estabelecimento(String nome, String telefone) {

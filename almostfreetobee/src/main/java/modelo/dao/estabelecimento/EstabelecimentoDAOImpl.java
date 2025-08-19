@@ -262,10 +262,10 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		
 		try{
 					
-			selectEstabelecimentos = conexao.prepareStatement("SELECT estabelecimento.*, endereco.* FROM estabelecimento INNER JOIN endereco ON estabelecimento.id_endereco = endereco.id_endereco WHERE nome_estabelecimento = ?;");
+			selectEstabelecimentos = conexao.prepareStatement("SELECT estabelecimento.*, endereco.* FROM estabelecimento INNER JOIN endereco ON estabelecimento.id_endereco = endereco.id_endereco WHERE nome_estabelecimento LIKE ?;");
 			
 			
-			selectEstabelecimentos.setString(1, nomePesquisa);
+			selectEstabelecimentos.setString(1, "%" + nomePesquisa + "%");
 			ResultSet resultado = selectEstabelecimentos.executeQuery();
 			
 			
