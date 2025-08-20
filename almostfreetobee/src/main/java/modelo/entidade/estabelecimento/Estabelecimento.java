@@ -87,7 +87,7 @@ public class Estabelecimento {
 
 	}
 
-	public Estabelecimento(Long idEstabelecimento, String nome, TipoEstabelecimento tipo, Endereco endereco,
+	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipo, Endereco endereco,
 			String cnpj, String email, String telefone) {
 
 		setId(id);
@@ -114,6 +114,14 @@ public class Estabelecimento {
 		setNome(nome);
 		setEmail(email);
 		setTelefone(telefone);
+	}
+
+	public Estabelecimento(Long id, String nome, String email, String telefone) {
+		setId(id);
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);
+		
 	}
 
 	public Long getId() {

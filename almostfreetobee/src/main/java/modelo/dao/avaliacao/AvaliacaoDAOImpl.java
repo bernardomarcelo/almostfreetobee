@@ -36,12 +36,19 @@ public class AvaliacaoDAOImpl implements AvaliacaoDAO {
 		String sql = "INSERT INTO avaliacao (nota_avaliacao, descricao_avaliacao, id_usuario, id_estabelecimento) VALUES (?, ?, ?, ?)";
 
 		try {
-			stmt = conexao.prepareStatement(sql);
+			stmt = conexao.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+			
 			stmt.setInt(1, avaliacao.getNota());
 			stmt.setString(2, avaliacao.getDescricao());
 			stmt.setLong(3, avaliacao.getUsuario().getId());
 			stmt.setLong(4, avaliacao.getEstabelecimento().getId());
 			stmt.executeUpdate();
+			
+			 ResultSet generatedKeys = stmt.getGeneratedKeys();
+		        if (generatedKeys.next()) {
+		            Long avaliacaoId = generatedKeys.getLong(1);
+		            avaliacao.setId(avaliacaoId); 
+		        }
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -11,16 +11,18 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
-
-@WebServlet("/avaliacao/*")
+@WebServlet(urlPatterns = { "/avaliacao/cadastrar", "/avaliacao/novo","/avaliacao/exibir-avaliacao"})
+//@WebServlet("/avaliacao/*")
 public class AvaliacaoServlet extends HttpServlet {
 
 	// private static final long serialVersionUID = 1L;
@@ -39,17 +41,21 @@ public class AvaliacaoServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 			
-		String action = request.getPathInfo();
+		String action = request.getServletPath();
 		if (action == null)
 			action = "/";
 
 		try {
 			switch (action) {
 
-			case "/":
+			case "/avaliacao/cadastrar":
 				cadastrarAvaliacao(request, response);
 				break;
 
+			case "/avaliacao/novo":
+				TelacadastroAvaliacao(request,response);
+				break;
+				
 			case "/editar":
 				editarAvaliacao(request, response);
 				break;
@@ -58,15 +64,17 @@ public class AvaliacaoServlet extends HttpServlet {
 				excluirAvaliacao(request, response);
 				break;
 
-			case "/ver":
-				listarAvaliacao(request, response);
+			case "/avaliacao/exibir-avaliacao":
+				exibirAvaliacao(request, response);
 				break;
 
-			case "/listar":
+			case "avaliacao/listar-":
 				listarAvaliacoes(request, response);
 				break;
 
 			default:
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/erro.jsp");
+				dispatcher.forward(request, response);
 
 				break;
 			}
@@ -76,25 +84,49 @@ public class AvaliacaoServlet extends HttpServlet {
 
 	}
 
+	private void TelacadastroAvaliacao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		  String estabelecimentoId = request.getParameter("estabelecimentoId");
+		    if (estabelecimentoId != null && !estabelecimentoId.isEmpty()) {
+		        request.setAttribute("estabelecimentoId", estabelecimentoId);
+		    }
+
+		    RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroAvaliacao.jsp");
+		    dispatcher.forward(request, response);
+		
+	}
+
 	private void cadastrarAvaliacao(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
 
-		Long usuarioId = Long.parseLong(request.getParameter("usuarioId"));
+		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("usuarioLogado") == null) {
+		    response.sendRedirect("login");
+		    return;
+		}
+		
+			Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+			
+				request.setAttribute("usuario", usuarioLogado);
+			
+		
 
-		Usuario usuario = new Usuario();
-		usuario.setId(usuarioId);
+	    
+	    Long estabelecimentoId = Long.parseLong(request.getParameter("estabelecimentoId"));
+	    Estabelecimento estabelecimento = new Estabelecimento();
+	    estabelecimento.setId(estabelecimentoId);
 
-		Long estabelecimentoId = Long.parseLong(request.getParameter("estabelecimentoId"));
+	    int nota = Integer.parseInt(request.getParameter("nota"));
+	    String descricao = request.getParameter("descricao");
 
-		Estabelecimento estabelecimento = new Estabelecimento();
-		estabelecimento.setId(estabelecimentoId);
+	    Avaliacao avaliacao = new Avaliacao(nota, descricao, usuarioLogado, estabelecimento);
 
-		int nota = Integer.parseInt(request.getParameter("nota"));
+	    dao.inserirAvaliacao(avaliacao); 
 
-		String descricao = request.getParameter("descricao");
-
-		dao.inserirAvaliacao(new Avaliacao(nota, descricao, usuario, estabelecimento));
-		response.sendRedirect("/teste/avaliacao/listar");
+	    
+	    response.sendRedirect("avaliacao/exibir-avaliacao?avaliacaoId=" + avaliacao.getId());
 
 	}
 
@@ -119,16 +151,16 @@ public class AvaliacaoServlet extends HttpServlet {
 
 	}
 
-	private void listarAvaliacao(HttpServletRequest request, HttpServletResponse response)
+	private void exibirAvaliacao(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
 
-		String idString = request.getParameter("id");
+		String idString = request.getParameter("avaliacaoid");
 		Long id = Long.parseLong(idString);
 
 		Avaliacao avaliacao = dao.recuperarAvaliacao(id);
 
 		request.setAttribute("avaliacao", avaliacao);
-		request.getRequestDispatcher("/mostrarAvaliacao.jsp").forward(request, response);
+		request.getRequestDispatcher("/exibirAvaliacao.jsp").forward(request, response);
 
 	}
 

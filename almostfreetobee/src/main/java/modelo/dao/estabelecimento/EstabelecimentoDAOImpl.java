@@ -51,7 +51,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					+ "horario_abertura_estabelecimento, "
 					+ "horario_fechamento_estabelecimento,"
 					
-					+ "id_endereco_estabelecimento) "
+					+ "id_endereco) "
 					+ "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			insertEstabelecimento.setString(1, estabelecimento.getNome());
@@ -302,7 +302,7 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 			
 			
 			while(resultado.next()) {
-				
+				Long idEstabelecimento = resultado.getLong("id_estabelecimento");
 				String nome = resultado.getString("nome_estabelecimento");
 				String email = resultado.getString("email_estabelecimento");
 				//TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
@@ -326,7 +326,7 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 				Endereco endereco = new Endereco(estado, cidade, bairro, cep, logradouro);
 					*/
 				//estabelecimentosRecuperados.add(new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horario, foto));
-				estabelecimentosRecuperados.add(new Estabelecimento(nome, email, telefone));
+				estabelecimentosRecuperados.add(new Estabelecimento(idEstabelecimento, nome, email, telefone));
 				
 			}
 			

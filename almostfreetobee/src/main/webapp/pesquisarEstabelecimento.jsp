@@ -18,7 +18,12 @@
 			<div>
 				<c:forEach var="estabelecimento" items="${estabelecimentos}">
 					<div>
-						<h1><c:out value="${estabelecimento.nome}"/></h1>			
+						<h1>
+						 <a href="/almostfreetobee/estabelecimento/exibir-perfil?id=${estabelecimento.id}">
+                        <c:out value="${estabelecimento.nome}"/>
+                    </a>
+						
+						</h1>			
 						<h4><c:out value="${estabelecimento.email}"/></h4>
 						<h4><c:out value="${estabelecimento.telefone}"/></h4>
 					</div>
