@@ -20,7 +20,7 @@ import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
-@WebServlet(urlPatterns = { "/estabelecimento/exibir-perfil", "/estabelecimento/novo", "/estabelecimento/cadastrar", "/estabelecimento/listar" })
+@WebServlet(urlPatterns = { "/estabelecimento/exibir-perfil", "/estabelecimento/novo", "/estabelecimento/cadastrar", "/estabelecimento/listar", "/estabelecimento/pesquisar-estabelecimento", "/estabelecimento/realizar-pesquisa" })
 //@WebServlet("/estabelecimento/*")
 public class EstabelecimentoServlet extends HttpServlet {
 	
@@ -59,15 +59,20 @@ public class EstabelecimentoServlet extends HttpServlet {
                 exibirPerfil(request, response);
                 break;
                 
-			case "/pesquisar-estabelecimento":
-				pesquisarEstabelecimento(request, response);
+			case "/estabelecimento/pesquisar-estabelecimento":
+				mostrarTelaPesquisarEstabelecimento(request, response);
 				break;
 			
 			case "/estabelecimento/listar":
 				listarEstabelecimentos(request, response);
 				break;
+			
+			case "/estabelecimento/realizar-pesquisa":
+				pesquisarEstabelecimento(request, response);
+				break;
+			
 			default:
-				RequestDispatcher dispatcher = request.getRequestDispatcher("erro.jsp");
+				RequestDispatcher dispatcher = request.getRequestDispatcher("/erro.jsp");
 				dispatcher.forward(request, response);
 				break;
 			}
@@ -78,13 +83,30 @@ public class EstabelecimentoServlet extends HttpServlet {
 	}
 	
 	
+	private void mostrarTelaPesquisarEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/pesquisarEstabelecimento.jsp");
+		dispatcher.forward(request, response);
+		
+	}
+
 	private void TelaInserirEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/cadastroEstabelecimento.jsp");
 		dispatcher.forward(request, response);
 	}
 
-	private void pesquisarEstabelecimento(HttpServletRequest request, HttpServletResponse response) {
+	private void pesquisarEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		
+		String nome = request.getParameter("recuperarEstabelecimento");
+		List<Estabelecimento> estabelecimentoRecuperados = daoEstabelecimento.pesquisarEstabelecimentos(nome);
+		
+		request.setAttribute("estabelecimentos", estabelecimentoRecuperados);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/pesquisarEstabelecimento.jsp");
+		dispatcher.forward(request, response);
+		
+		
 		
 		
 	}
@@ -137,10 +159,10 @@ public class EstabelecimentoServlet extends HttpServlet {
 		String idString = request.getParameter("id");
 	    Long id = Long.parseLong(idString);
 
-	    List<Estabelecimento> estabelecimento = daoEstabelecimento.recuperarEstabelecimentoUnico(id);
+	    Estabelecimento estabelecimento = daoEstabelecimento.recuperarEstabelecimentoUnico(id);
 
 
 	    request.setAttribute("estabelecimento", estabelecimento);
-	    request.getRequestDispatcher("exibirPerfilEstabelecimento.jsp").forward(request, response);
+	    request.getRequestDispatcher("/exibirPerfilEstabelecimento.jsp").forward(request, response);
 	}
 }

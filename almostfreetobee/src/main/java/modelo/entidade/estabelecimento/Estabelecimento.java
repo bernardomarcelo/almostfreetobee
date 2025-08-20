@@ -110,6 +110,12 @@ public class Estabelecimento {
 		setTelefone(telefone);
 	}
 
+	public Estabelecimento(String nome, String email, String telefone) {
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);
+	}
+
 	public Long getId() {
 
 		return id;

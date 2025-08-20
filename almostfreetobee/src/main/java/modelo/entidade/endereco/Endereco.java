@@ -28,6 +28,8 @@ public class Endereco {
 		
 	}
 
+	
+
 	public Long getId() {
         return id;
     }
