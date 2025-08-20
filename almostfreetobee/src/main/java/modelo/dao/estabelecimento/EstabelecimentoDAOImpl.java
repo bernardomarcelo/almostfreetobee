@@ -1,11 +1,14 @@
 package modelo.dao.estabelecimento;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +48,9 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					+ "cnpj_estabelecimento, "
 					+ "email_estabelecimento, "
 					+ "telefone_estabelecimento, "
-					+ "horario_estabelecimento, "
-					+ "id_foto_estabelecimento, "
+					+ "horario_abertura_estabelecimento, "
+					+ "horario_fechamento_estabelecimento,"
+					
 					+ "id_endereco_estabelecimento) "
 					+ "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
@@ -55,7 +59,8 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 			insertEstabelecimento.setString(3, estabelecimento.getCnpj());
 			insertEstabelecimento.setString(4, estabelecimento.getEmail());
 			insertEstabelecimento.setString(5, estabelecimento.getTelefone());
-			insertEstabelecimento.setString(6, estabelecimento.getHorarioFuncionamento());
+			insertEstabelecimento.setTime(6, estabelecimento.getHorarioAbertura());
+			insertEstabelecimento.setTime(7, estabelecimento.getHorarioFechamento());
 			
 			insertEstabelecimento.setLong(8, idEndereco);
 
@@ -81,8 +86,6 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 				if (insertEstabelecimento != null)
 					insertEstabelecimento.close();
 
-				if (conexao != null)
-					conexao.close();
 
 			} catch (SQLException erro) {
 
@@ -197,63 +200,65 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 	
 	
 	@Override
-	public List<Estabelecimento> recuperarEstabelecimentos(){
-		
-		try {
-			this.conexao = ConexaoFactory.getConnection();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-			
-		List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
-		
-		PreparedStatement selectEstabelecimentos = null;
-		
-		try{
-					
-			selectEstabelecimentos = conexao.prepareStatement("select estabelecimento.*, foto.*, endereco.* "
-					+ "from foto right join estabelecimento "
-					+ "on foto.id_foto = estabelecimento.id_foto_estabelecimento left join endereco "
-					+ "on estabelecimento.id_endereco_estabelecimento = endereco.id_endereco;");
-			
-			ResultSet resultado = selectEstabelecimentos.executeQuery();
-			
-			while(resultado.next()) {
-				Long idEstabelecimento = resultado.getLong("id_estabelecimento");
-				String nome = resultado.getString("nome_estabelecimento");
-				TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
-				String cnpj = resultado.getString("cnpj_estabelecimento");
-				String email = resultado.getString("email_estabelecimento");
-				String telefone = resultado.getString("telefone_estabelecimento");
-				String horario = resultado.getString("horario_estabelecimento");
-				
-				Long idFoto = resultado.getLong("id_foto");
-				String nomeArquivo = resultado.getString("caminho_arquivo_foto");
-				byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
-				
-				Long idEndereco = resultado.getLong("id_endereco");				
-				String estado = resultado.getString("estado");
-				String cidade = resultado.getString("cidade");
-				String bairro = resultado.getString("bairro");
-				int cep = resultado.getInt("cep");
-				String logradouro = resultado.getString("logradouro");						 
-				
-				Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
-						
-				Endereco endereco = new Endereco(idEndereco, estado, cidade, bairro, cep, logradouro);
+	public List<Estabelecimento> recuperarEstabelecimentos() {
+	    
+	    try {
+	        this.conexao = ConexaoFactory.getConnection();
+	    } catch (ClassNotFoundException e) {
+	        e.printStackTrace();
+	    }
 
-				estabelecimentosRecuperados.add(new Estabelecimento(idEstabelecimento, nome, tipo, endereco, cnpj, email, telefone, horario, foto));
-			}
-			
-		}catch(SQLException erro) {
-			erro.printStackTrace();
-		}
-		
-		
-		return estabelecimentosRecuperados;
+	    List<Estabelecimento> estabelecimentosRecuperados = new ArrayList<>();
+	    PreparedStatement selectEstabelecimentos = null;
+
+	    try {
+	        selectEstabelecimentos = conexao.prepareStatement(
+	            "SELECT * from estabelecimento"
+	        );
+
+	        ResultSet resultado = selectEstabelecimentos.executeQuery();
+
+	        while (resultado.next()) {
+	            Long idEstabelecimento = resultado.getLong("id_estabelecimento");
+	            String nome = resultado.getString("nome_estabelecimento");
+	            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
+	            String cnpj = resultado.getString("cnpj_estabelecimento");
+	            String email = resultado.getString("email_estabelecimento");
+	            String telefone = resultado.getString("telefone_estabelecimento");
+
+	            /* NOVO: horários como Time
+	            Time horarioAbertura = resultado.getTime("horario_abertura_estabelecimento");
+	            Time horarioFechamento = resultado.getTime("horario_fechamento_estabelecimento");
+				*/
+	         //   Long idFoto = resultado.getLong("id_foto");
+	          //  String nomeArquivo = resultado.getString("caminho_arquivo_foto");
+	           // byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
+	          //  Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
+
+	          /*  Long idEndereco = resultado.getLong("id_endereco_estabelecimento");                
+	            String estado = resultado.getString("estado_endereco");
+	            String cidade = resultado.getString("cidade_endereco");
+	            String bairro = resultado.getString("bairro_endereco");
+	            String cep = resultado.getString("cep_endereco");
+	           */ //String logradouro = resultado.getString("logradouro_endereco");                         
+	            //Endereco endereco = new Endereco(idEndereco, estado, cidade, bairro, cep, logradouro);
+
+	            estabelecimentosRecuperados.add(
+	                new Estabelecimento(idEstabelecimento, nome, tipo, email, telefone)
+	            );
+	        }
+
+	    } catch (SQLException erro) {
+	    	StringWriter sw = new StringWriter();
+	    	PrintWriter pw = new PrintWriter(sw);
+	        erro.printStackTrace(pw);
+	        System.out.println(sw.toString());
+
+	    }
+
+	    return estabelecimentosRecuperados;
 	}
-
-	@Override
+	/*@Override
 	public List<Estabelecimento> pesquisarEstabelecimento(String nomePesquisa) {
 		
 		List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
@@ -294,7 +299,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 				Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
 						
 				Endereco endereco = new Endereco(estado, cidade, bairro, cep, logradouro);
-					*/
+					
 				//estabelecimentosRecuperados.add(new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horario, foto));
 				estabelecimentosRecuperados.add(new Estabelecimento(nome, tipo, telefone, horario));
 			}
@@ -306,7 +311,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 		
 		return estabelecimentosRecuperados;
 	}
-	
+	*/
 
 
 }

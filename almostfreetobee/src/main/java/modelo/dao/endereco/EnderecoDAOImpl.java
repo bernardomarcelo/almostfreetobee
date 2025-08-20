@@ -38,17 +38,17 @@ private Connection conexao;
 
 			
 			insertEndereco = conexao.prepareStatement("INSERT INTO endereco ("
-					+ "estado, "
-					+ "cidade, "
-					+ "bairro, "
-					+ "cep, "
-					+ "logradouro) "
+					+ "estado_endereco, "
+					+ "cidade_endereco, "
+					+ "bairro_endereco, "
+					+ "cep_endereco, "
+					+ "logradouro_endereco) "
 					+ "VALUES (?,?,?,?,?)",Statement.RETURN_GENERATED_KEYS);
 
 			insertEndereco.setString(1, endereco.getEstado());
 			insertEndereco.setString(2, endereco.getCidade()); // setString?
 			insertEndereco.setString(3, endereco.getBairro());
-			insertEndereco.setInt(4, endereco.getCep());
+			insertEndereco.setString(4, endereco.getCep());
 			insertEndereco.setString(5, endereco.getLogradouro());
 
 			insertEndereco.execute();

@@ -1,4 +1,5 @@
 package controle.servlet.estabelecimento;
+import java.sql.Time;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -92,7 +93,7 @@ public class EstabelecimentoServlet extends HttpServlet {
 		
 		List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentos();
 
-		request.setAttribute("estabelecimento", estabelecimentos);
+		request.setAttribute("estabelecimentos", estabelecimentos);
 
 		request.getRequestDispatcher("/listaEstabelecimentos.jsp").forward(request, response);
 		
@@ -107,23 +108,25 @@ public class EstabelecimentoServlet extends HttpServlet {
 		String estado = request.getParameter("estado");
 		String cidade = request.getParameter("cidade");
 		String bairro = request.getParameter("bairro");
-		String cepString = request.getParameter("cep");
-		int cep = Integer.valueOf(cepString);
+		String cep = request.getParameter("cep");
 		String logradouro = request.getParameter("logradouro");
 		
 		Endereco endereco = new Endereco(estado, cidade, bairro, cep, logradouro);
 		
 		String cnpj = request.getParameter("cnpj");
 		
-		String horarioAbertura = request.getParameter("abertura");
-		String horarioFechamento = request.getParameter("fechamento");	
+		String aberturaStr = request.getParameter("abertura"); 
+		String fechamentoStr = request.getParameter("fechamento");
+
+		Time horarioAbertura = Time.valueOf(aberturaStr + ":00"); 
+		Time horarioFechamento = Time.valueOf(fechamentoStr + ":00");	
 		String telefone = request.getParameter("telefone");
 		String email = request.getParameter("email");
 
 		daoEndereco.inserirEndereco(endereco);
 		Long idEndereco = endereco.getId();
 
-		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura);
+		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura, horarioFechamento);
 		daoEstabelecimento.inserirEstabelecimento(estabelecimento, idEndereco);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/PaginaVerificacao.jsp");
 		dispatcher.forward(request, response);

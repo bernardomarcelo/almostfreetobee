@@ -37,8 +37,8 @@
     	<input type="text" id="cnpj" name="cnpj" placeholder="" required>
     	<br>
 		<label>Horario de funcionamento</label>
-    	<input type="number" id="abertura" name="abertura" placeholder="" required>
-    	<input type="number" id="fechamento" name="fechamento" placeholder="" required>
+    	<input type="time" id="abertura" name="abertura" placeholder="" required>
+    	<input type="time" id="fechamento" name="fechamento" placeholder="" required>
     	<br>
     	<h3>Endereco</h3>
     	<br>
@@ -51,8 +51,6 @@
     	<label>Bairro</label>
     	<input type="text" id="bairro" name="bairro" placeholder="" required>
     	<br>
-    	<label>Cidade</label>
-    	<input type="text" id="cidade" name="cidade" placeholder="" required>
     	<br>
     	<label>CEP</label>
     	<input type="number" id="cep" name="cep" placeholder="" required>
