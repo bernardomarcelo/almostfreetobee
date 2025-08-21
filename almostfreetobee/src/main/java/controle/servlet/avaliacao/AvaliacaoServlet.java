@@ -112,12 +112,12 @@ public class AvaliacaoServlet extends HttpServlet {
 				request.setAttribute("usuario", usuarioLogado);
 			
 		
-
+		
 	    
 	    Long estabelecimentoId = Long.parseLong(request.getParameter("estabelecimentoId"));
 	    Estabelecimento estabelecimento = new Estabelecimento();
 	    estabelecimento.setId(estabelecimentoId);
-
+	    
 	    int nota = Integer.parseInt(request.getParameter("nota"));
 	    String descricao = request.getParameter("descricao");
 

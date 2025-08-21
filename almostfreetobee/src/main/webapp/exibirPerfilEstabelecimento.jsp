@@ -25,7 +25,7 @@
     <h2><strong>Tipo de estabelecimento</strong></h2>
     <p>${estabelecimento.tipoEstabelecimento}</p>
     
-    <a href="avaliacao/novo?estabelecimentoId=${estabelecimento.id}">
+    <a href="${pageContext.request.contextPath}/avaliacao/novo?estabelecimentoId=${estabelecimento.id}">
     Adicionar Avaliação
 </a>
 </body>

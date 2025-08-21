@@ -36,10 +36,17 @@ public class Avaliacao {
 		 setDescricao(descricao);
 		 setUsuario(usuario);
 		 setEstabelecimento(estabelecimento);
+	 }
 		 
+		 /*public Avaliacao(long id, int nota, String descricao, Long usuario, Long estabelecimento) {
+			 setId(id);
+			 setNota(nota);
+			 setDescricao(descricao);
+			 setUsuario(usuario);
+			 setEstabelecimento(estabelecimento);
 		 
 	 }
-	 
+	 */
 	 
 
 	public Long getId() {
