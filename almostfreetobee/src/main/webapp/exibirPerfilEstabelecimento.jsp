@@ -21,12 +21,37 @@
     <h2><strong>Contato</strong></h2>
     <p>Telefone: ${estabelecimento.telefone}</p>
     <p>E-mail: ${estabelecimento.email}</p>
-    <p>E-mail: ${estabelecimento.id}</p>
+    
     <h2><strong>Tipo de estabelecimento</strong></h2>
     <p>${estabelecimento.tipoEstabelecimento}</p>
     
+    <c:if test="${not empty avaliacoes }">
     <a href="${pageContext.request.contextPath}/avaliacao/novo?estabelecimentoId=${estabelecimento.id}">
     Adicionar Avaliação
 </a>
+</c:if>
+<h2>Avaliações do Estabelecimento: </h2>
+<c:if test="${not empty avaliacoes}">
+    <ul>
+        <c:forEach var="avaliacao" items="${avaliacoes}">
+            <li>
+                <strong>Nota:</strong> ${avaliacao.nota} <br/>
+                <strong>Descrição:</strong> ${avaliacao.descricao} <br/> <br> <br>
+                
+            </li>
+        </c:forEach>
+    </ul>
+</c:if>
+<c:if test="${empty avaliacoes}">
+    <p>Este estabelecimento ainda não possui avaliações.</p>
+    
+    <a href="${pageContext.request.contextPath}/avaliacao/novo?estabelecimentoId=${estabelecimento.id}">
+    Seja o primeiro a cadastrar uma avaliação neste estabelecimento!
+</a>
+    
+</c:if>
+
+
+
 </body>
 </html>

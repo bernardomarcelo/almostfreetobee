@@ -15,8 +15,9 @@
 
 <p>Cadastre um estabelecimento!<a href='/almostfreetobee/estabelecimento/novo'>Novo estabelecimento!!</a></p> <br> <br>
 
-<p>Pesquise um estabelecimento!<a href='/almostfreetobee/estabelecimento/pesquisar-estabelecimento'>Veja Estabelecimentos!!</a></p>
+<p>Pesquise um estabelecimento!<a href='/almostfreetobee/estabelecimento/pesquisar-estabelecimento'>Veja Estabelecimentos!!</a></p> <br> <br>
 
+<p>Veja suas avaliações!<a href='/almostfreetobee/exibir-avaliacoes'>Suas avaliações!!</a></p>
 
 
 </body>

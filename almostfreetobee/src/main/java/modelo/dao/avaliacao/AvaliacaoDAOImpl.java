@@ -125,7 +125,7 @@ public class AvaliacaoDAOImpl implements AvaliacaoDAO {
 	}
 
 	@Override
-	public Avaliacao recuperarAvaliacao(long id) {
+	public Avaliacao recuperarAvaliacao(Long id) {
 		Avaliacao avaliacao = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -152,6 +152,7 @@ public class AvaliacaoDAOImpl implements AvaliacaoDAO {
 				estabelecimento.setId(rs.getLong("id_estabelecimento"));
 				avaliacao.setEstabelecimento(estabelecimento);
 
+				
 			}
 
 		} catch (SQLException e) {
@@ -220,6 +221,94 @@ public class AvaliacaoDAOImpl implements AvaliacaoDAO {
 		}
 
 		return avaliacoes;
+	}
+
+	@Override
+	public List<Avaliacao> recuperarAvaliacoesEstabelecimento(Long estabelecimentoId) {
+		
+		List<Avaliacao> avaliacoes = new ArrayList<>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		String sql = "SELECT nota_avaliacao, descricao_avaliacao FROM avaliacao WHERE id_estabelecimento = ?";
+
+		try {
+			stmt = conexao.prepareStatement(sql);
+			stmt.setLong(1, estabelecimentoId);
+			rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				Avaliacao avaliacao = new Avaliacao();
+				
+				avaliacao.setNota(rs.getInt("nota_avaliacao"));
+				avaliacao.setDescricao(rs.getString("descricao_avaliacao"));
+				
+				avaliacoes.add(avaliacao);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return avaliacoes;
+	}
+
+	@Override
+	public List<Avaliacao> recuperarAvaliacoesUsuario(Long usuarioId) {
+		List<Avaliacao> avaliacoes = new ArrayList<>();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		String sql = "SELECT nota_avaliacao, descricao_avaliacao FROM avaliacao WHERE id_usuario = ?";
+
+		try {
+			stmt = conexao.prepareStatement(sql);
+			stmt.setLong(1, usuarioId);
+			rs = stmt.executeQuery();
+			
+			while (rs.next()) {
+				
+				Avaliacao avaliacao = new Avaliacao();
+				
+				avaliacao.setNota(rs.getInt("nota_avaliacao"));
+				avaliacao.setDescricao(rs.getString("descricao_avaliacao"));
+				
+				avaliacoes.add(avaliacao);
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+				if (rs != null)
+					rs.close();
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return avaliacoes;
+	
 	}
 
 }

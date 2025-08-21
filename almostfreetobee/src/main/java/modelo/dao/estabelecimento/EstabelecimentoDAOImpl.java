@@ -51,6 +51,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					+ "horario_abertura_estabelecimento, "
 					+ "horario_fechamento_estabelecimento,"
 					
+					
 					+ "id_endereco) "
 					+ "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
@@ -209,9 +210,9 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 
 		            estabelecimento.setId(rs.getLong("id_estabelecimento"));
 		            estabelecimento.setNome(rs.getString("nome_estabelecimento"));
-		           /* String tipoStr = rs.getString("tipo_estabelecimento");
+		           String tipoStr = rs.getString("tipo_estabelecimento");
 		            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(tipoStr.toUpperCase());
-		            estabelecimento.setTipoEstabelecimento(tipo);*/
+		            estabelecimento.setTipoEstabelecimento(tipo);
 
 		            estabelecimento.setCnpj(rs.getString("cnpj_estabelecimento"));
 		            estabelecimento.setEmail(rs.getString("email_estabelecimento"));

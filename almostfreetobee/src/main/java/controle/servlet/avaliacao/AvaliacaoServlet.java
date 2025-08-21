@@ -126,7 +126,8 @@ public class AvaliacaoServlet extends HttpServlet {
 	    dao.inserirAvaliacao(avaliacao); 
 
 	    
-	    response.sendRedirect("avaliacao/exibir-avaliacao?avaliacaoId=" + avaliacao.getId());
+	    response.sendRedirect(request.getContextPath() + "/estabelecimento/exibir-perfil?id=" + estabelecimento.getId());
+
 
 	}
 
@@ -154,7 +155,7 @@ public class AvaliacaoServlet extends HttpServlet {
 	private void exibirAvaliacao(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
 
-		String idString = request.getParameter("avaliacaoid");
+		String idString = request.getParameter("id");
 		Long id = Long.parseLong(idString);
 
 		Avaliacao avaliacao = dao.recuperarAvaliacao(id);

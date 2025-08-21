@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import modelo.dao.avaliacao.AvaliacaoDAO;
+import modelo.dao.avaliacao.AvaliacaoDAOImpl;
 import modelo.dao.endereco.EnderecoDAO;
 import modelo.dao.endereco.EnderecoDAOImpl;
 import modelo.dao.estabelecimento.EstabelecimentoDAO;
@@ -27,10 +29,12 @@ public class EstabelecimentoServlet extends HttpServlet {
 	//private static final long serialVersionUID = 1L;
 	private EstabelecimentoDAO daoEstabelecimento;
 	private EnderecoDAO daoEndereco;
+	private AvaliacaoDAO daoAvaliacao;
 
 	public void init() {
 		daoEstabelecimento = new EstabelecimentoDAOImpl();
 		daoEndereco = new EnderecoDAOImpl();
+		daoAvaliacao = new AvaliacaoDAOImpl();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -159,9 +163,11 @@ public class EstabelecimentoServlet extends HttpServlet {
 		String idString = request.getParameter("id");
 	    Long id = Long.parseLong(idString);
 
-	    Estabelecimento estabelecimento = daoEstabelecimento.recuperarEstabelecimentoUnico(id);
+	    Estabelecimento estabelecimento = daoEstabelecimento.recuperarEstabelecimentoUnico(id); 
+	    List<Avaliacao> avaliacoes = daoAvaliacao.recuperarAvaliacoesEstabelecimento(id);
+	    
 
-
+	    request.setAttribute("avaliacoes", avaliacoes);
 	    request.setAttribute("estabelecimento", estabelecimento);
 	    request.getRequestDispatcher("/exibirPerfilEstabelecimento.jsp").forward(request, response);
 	}
