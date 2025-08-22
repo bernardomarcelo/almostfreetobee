@@ -135,4 +135,9 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 	}
 	
+	private void exibir4Estabelecimentos(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+	}
+	
 }

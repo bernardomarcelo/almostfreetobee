@@ -308,6 +308,17 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		return estabelecimentosRecuperados;
 	}
 	
+	@Override
+	public List<Estabelecimento> recuperarEstabelecimentosPelaAvaliacao() {
+		List<Estabelecimento> estabelecimentos = new ArrayList<>();
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conexao.prepareStatement("SELECT estabelecimento.* FROM avaliacao INNER JOIN estabelecimento ON estabelecimento.id_estabelecimento = avaliacao.id_estabelecimento")
+		}
+		return null;
+	}
 
 
 }
