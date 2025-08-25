@@ -152,6 +152,11 @@ public class Estabelecimento {
 		
 	}
 
+	public Estabelecimento(Long idEstabelecimento, String nome, TipoEstabelecimento tipo, Endereco endereco,
+			String cnpj, String email, String telefone, String horario, Foto foto) {
+		
+	}
+
 	public Long getId() {
 
 		return id;

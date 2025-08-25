@@ -55,7 +55,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 			insertEstabelecimento.setString(3, estabelecimento.getCnpj());
 			insertEstabelecimento.setString(4, estabelecimento.getEmail());
 			insertEstabelecimento.setString(5, estabelecimento.getTelefone());
-			insertEstabelecimento.setString(6, estabelecimento.getHorarioFuncionamento());
+			//insertEstabelecimento.setString(6, estabelecimento.getHorarioFuncionamento());
 			
 			insertEstabelecimento.setLong(8, idEndereco);
 
@@ -280,10 +280,10 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 				String estado = resultado.getString("estado");
 				String cidade = resultado.getString("cidade");
 				String bairro = resultado.getString("bairro");
-				int cep = resultado.getInt("cep");
+				String cep = resultado.getString("cep");
 				String logradouro = resultado.getString("logradouro");						 
 				
-				Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
+				Foto foto = new Foto(idFoto, conteudoFoto, nomeArquivo);
 						
 				Endereco endereco = new Endereco(idEndereco, estado, cidade, bairro, cep, logradouro);
 
@@ -331,7 +331,7 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 				String estado = resultado.getString("estado_endereco");
 				String cidade = resultado.getString("cidade_endereco");
 				String bairro = resultado.getString("bairro_endereco");
-				int cep = resultado.getInt("cep_endereco");
+				String cep = resultado.getString("cep_endereco");
 				String logradouro = resultado.getString("logradouro_endereco");						 
 				
 				//Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
@@ -354,5 +354,32 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 	}
 	
 
+	@Override
+	public List<Estabelecimento> recuperarEstabelecimentosPelaAvaliacao() {
+		
+		List<Estabelecimento> estabelecimentos = new ArrayList<>();
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conexao.prepareStatement("SELECT e.*, COUNT(a.id_avaliacao) FROM estabelecimento e LEFT JOIN avaliacao a ON e.id_estabelecimento = a.id_estabelecimento GROUP BY e.id_estabelecimento ORDER BY COUNT(a.id_avaliacao) LIMIT 4;");
+			ResultSet resultado = stmt.executeQuery();
+			
+			while(resultado.next()) {
+				Long id = resultado.getLong("id_estabelecimento");
+				String nome = resultado.getString("nome_estabelecimento");
+				String email = resultado.getString("email_estabelecimento");
+				String telefone = resultado.getString("telefone_estabelecimento");
+				
+				estabelecimentos.add(new Estabelecimento(id, nome, email, telefone));
+
+			}
+		}catch(SQLException erro) {
+			erro.printStackTrace();
+		}
+		
+		
+		return estabelecimentos;
+		}
 
 }

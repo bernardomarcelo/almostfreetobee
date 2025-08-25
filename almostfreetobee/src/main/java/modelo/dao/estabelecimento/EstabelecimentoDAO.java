@@ -34,7 +34,7 @@ public interface EstabelecimentoDAO {
 
 		List <Estabelecimento> pesquisarEstabelecimento (String nomePesquisa);
 		
-		void recuperarEstabelecimentoUnico(Long id);
+		Estabelecimento recuperarEstabelecimentoUnico(Long id);
 		
 		List<Estabelecimento> recuperarEstabelecimentos();
 		
