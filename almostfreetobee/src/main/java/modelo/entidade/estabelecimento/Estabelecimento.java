@@ -74,6 +74,12 @@ public class Estabelecimento {
 		// TODO Auto-generated constructor stub
 	}
 
+	public Estabelecimento(Long id, String nome, String email, String telefone) {
+		setId(id);
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);	}
+
 	public Long getId() {
 
         return id;

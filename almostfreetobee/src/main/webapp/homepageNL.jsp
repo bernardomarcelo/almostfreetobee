@@ -28,13 +28,12 @@
             <h2 id="titulo-destaques">Estabelecimentos <span class="destaque">destaques</span></h2>
 
             
-            <div id="lista-destaques" class="cartoes">
-                		<c:forEach var="estabelecimento" items="${estabelecimentos}"/>
-					<div>
-						<p><c:out value="${estabelecimento.foto}"/></p>
-						<h1><c:out value="${estabelecimento.nome}"/></h1>			
-					</div>
-            </div>
+         <c:forEach var="estabelecimento" items="${estabelecimentos}">
+  		  	<div>
+       		 	<p><c:out value="${estabelecimento.foto}"/></p>
+        		<h1><c:out value="${estabelecimento.nome}"/></h1>			
+    		</div>
+		</c:forEach>
         
             <p><a href="">Ver mais estabelecimentos amigáveis...</a></p>
             

@@ -310,15 +310,31 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 	
 	@Override
 	public List<Estabelecimento> recuperarEstabelecimentosPelaAvaliacao() {
+		
 		List<Estabelecimento> estabelecimentos = new ArrayList<>();
 		
 		PreparedStatement stmt = null;
 		
 		try {
-			stmt = conexao.prepareStatement("SELECT estabelecimento.* FROM avaliacao INNER JOIN estabelecimento ON estabelecimento.id_estabelecimento = avaliacao.id_estabelecimento")
+			stmt = conexao.prepareStatement("SELECT e.*, COUNT(a.id_avaliacao) FROM estabelecimento e LEFT JOIN avaliacao a ON e.id_estabelecimento = a.id_estabelecimento GROUP BY e.id_estabelecimento ORDER BY COUNT(a.id_avaliacao) LIMIT 4;");
+			ResultSet resultado = stmt.executeQuery();
+			
+			while(resultado.next()) {
+				Long id = resultado.getLong("id_estabelecimento");
+				String nome = resultado.getString("nome_estabelecimento");
+				String email = resultado.getString("email_estabelecimento");
+				String telefone = resultado.getString("telefone_Estabelecimento");
+				
+				estabelecimentos.add(new Estabelecimento(id, nome, email, telefone));
+
+			}
+		}catch(SQLException erro) {
+			erro.printStackTrace();
 		}
-		return null;
-	}
+		
+		
+		return estabelecimentos;
+		}
 
 
 }

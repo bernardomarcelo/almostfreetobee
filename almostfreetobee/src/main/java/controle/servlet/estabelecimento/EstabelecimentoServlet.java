@@ -19,7 +19,7 @@ import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 
-@WebServlet(urlPatterns = {"/PerfilEstabelecimento", "/pesquisar-estabelecimento", "/realizar-pesquisa"})
+@WebServlet(urlPatterns = {"/PerfilEstabelecimento", "/pesquisar-estabelecimento", "/realizar-pesquisa", "/homepageNL"})
 public class EstabelecimentoServlet extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
@@ -60,6 +60,10 @@ public class EstabelecimentoServlet extends HttpServlet {
 				
 			case "/realizar-pesquisa":
 				pesquisarEstabelecimento(request, response);
+				break;
+				
+			case "/homepageNL":
+				exibir4Estabelecimentos(request, response);
 				break;
                 
 			default:
@@ -135,9 +139,12 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 	}
 	
-	private void exibir4Estabelecimentos(HttpServletRequest request, HttpServletResponse response) {
+	private void exibir4Estabelecimentos(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentosPelaAvaliacao();
 		
+		request.setAttribute("estabelecimentos", estabelecimentos);
+		request.getRequestDispatcher("/homepageNL.jsp").forward(request, response);
 	}
 	
 }
