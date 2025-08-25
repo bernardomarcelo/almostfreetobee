@@ -2,18 +2,17 @@ package modelo.entidade.foto;
 
 public class Foto {
     private Long id;
-    private String caminhoArquivo;
     private byte[] conteudoFoto;
+    private String extensaoFoto;
 
-    public Foto(Long id, String nomeArquivo, byte[] conteudoFoto){
+    public Foto(Long id, byte[] conteudoFoto, String extensaoFoto){
         setId(id);
-        setCaminhoArquivo(nomeArquivo);
         setConteudoFoto(conteudoFoto);
+        setExtensaoFoto(extensaoFoto);
     }
-    
-    public Foto(String nomeArquivo, byte[] conteudoFoto){
-        setCaminhoArquivo(nomeArquivo);
-        setConteudoFoto(conteudoFoto);
+
+    public Foto() {
+
     }
 
     public Long getId() {
@@ -24,14 +23,6 @@ public class Foto {
         this.id = id;
     }
 
-    public String getCaminhoArquivo() {
-        return caminhoArquivo;
-    }
-
-    public void setCaminhoArquivo(String caminhoArquivo) {
-        this.caminhoArquivo = caminhoArquivo;
-    }
-
     public byte[] getConteudoFoto() {
         return conteudoFoto;
     }
@@ -40,4 +31,11 @@ public class Foto {
         this.conteudoFoto = conteudoFoto;
     }
 
+    public String getExtensaoFoto() {
+        return extensaoFoto;
+    }
+
+    public void setExtensaoFoto(String extensaoFoto) {
+        this.extensaoFoto = extensaoFoto;
+    }
 }

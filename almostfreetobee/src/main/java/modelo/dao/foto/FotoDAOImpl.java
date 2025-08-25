@@ -1,36 +1,35 @@
 package modelo.dao.foto;
 
-
-/*import modelo.entidade.foto.Foto;
+import modelo.entidade.foto.Foto;
 import modelo.conexao.factory.ConexaoFactory;
 
 import java.sql.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 
-
-public class FotoDAOImpl implements FotoDAO{
-    private ConexaoFactory conexao;
+public class FotoDAOImpl implements FotoDAO {
+    
+	private  Connection conexao;
 
     public FotoDAOImpl() {
-        this.conexao = new ConexaoFactory();
+    	try {
+			this.conexao = ConexaoFactory.getConnection();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
     }
 
     @Override
     public void adicionarFoto(Foto foto) {
 
-        String sql = "INSERT INTO foto (id, caminhoArquivo, conteudoFoto) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO foto (extensaoFoto, conteudoFoto) VALUES (?, ?)";
 
-        try Connection connection = ConexaoFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS))catch(ClassNotFoundException e) {
+        try (
+             PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setLong(1, foto.getId());
-            stmt.setString(2, foto.getCaminhoArquivo());
-            stmt.setBytes(3, foto.getConteudoFoto());
+            stmt.setString(1, foto.getExtensaoFoto()); // verifique se esse nome corresponde a caminhoArquivo
+            stmt.setBytes(2, foto.getConteudoFoto());
             stmt.executeUpdate();
-            stmt.close();
 
             try (ResultSet rs = stmt.getGeneratedKeys()) {
                 if (rs.next()) {
@@ -45,10 +44,11 @@ public class FotoDAOImpl implements FotoDAO{
 
     @Override
     public void deletarFoto(Foto foto) {
+
         String sql = "DELETE FROM foto WHERE id = ?";
 
-        try (Connection connection = conexao.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setLong(1, foto.getId());
             int rowsAffected = stmt.executeUpdate();
@@ -62,17 +62,17 @@ public class FotoDAOImpl implements FotoDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
     public void atualizarFoto(Foto foto) {
-        String sql = "UPDATE foto SET caminhoArquivo = ?, conteudoFoto = ? WHERE id = ?";
 
-        try (Connection connection = ConexaoFactory.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        String sql = "UPDATE foto SET extensaoFoto = ?, conteudoFoto = ? WHERE id = ?";
 
-            stmt.setString(1, foto.getCaminhoArquivo());
+        try (
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
+
+            stmt.setString(1, foto.getExtensaoFoto()); // verifique se deve ser realmente extensão ou caminho
             stmt.setBytes(2, foto.getConteudoFoto());
             stmt.setLong(3, foto.getId());
 
@@ -87,25 +87,24 @@ public class FotoDAOImpl implements FotoDAO{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
-    public Foto recuperarFoto(Foto foto) {
-        String sql = "SELECT id, caminhoArquivo, conteudoFoto FROM foto WHERE id = ?";
-        //Foto foto = null;
+    public Foto recuperarFoto(Foto foto)  {
+        String sql = "SELECT id, extensaoFoto, conteudoFoto FROM foto WHERE id = ?";
+        Foto resultado = null;
 
-        try (Connection connection = conexao.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql)) {
+        try (
+             PreparedStatement stmt = conexao.prepareStatement(sql)) {
 
             stmt.setLong(1, foto.getId());
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                   // foto = new Foto();
-                    foto.setId(rs.getLong("id"));
-                    foto.setNomeArquivo(rs.getString("caminhoArquivo"));
-                    foto.setConteudoFoto(rs.getBytes("conteudoFoto"));
+                    resultado = new Foto();
+                    resultado.setId(rs.getLong("id"));
+                    resultado.setExtensaoFoto(rs.getString("extensaoFoto"));
+                    resultado.setConteudoFoto(rs.getBytes("conteudoFoto"));
                 } else {
                     System.out.println("Nenhuma foto encontrada com o ID fornecido.");
                 }
@@ -115,6 +114,7 @@ public class FotoDAOImpl implements FotoDAO{
             e.printStackTrace();
         }
 
-        return foto;
+        return resultado;
     }
-}*/
+}
+
