@@ -323,7 +323,7 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 				Long id = resultado.getLong("id_estabelecimento");
 				String nome = resultado.getString("nome_estabelecimento");
 				String email = resultado.getString("email_estabelecimento");
-				String telefone = resultado.getString("telefone_Estabelecimento");
+				String telefone = resultado.getString("telefone_estabelecimento");
 				
 				estabelecimentos.add(new Estabelecimento(id, nome, email, telefone));
 
