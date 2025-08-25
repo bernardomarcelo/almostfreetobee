@@ -1,149 +1,235 @@
 package modelo.entidade.estabelecimento;
 
+import java.sql.Time;
+
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.foto.Foto;
+import modelo.entidade.usuario.Usuario;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 
 public class Estabelecimento {
 
-    private Long id;
-    private String nome;
-    private TipoEstabelecimento tipoEstabelecimento;
-    private Endereco endereco;
-    private String cnpj;
-    private String email;
-    private String telefone;
-    private String horarioFuncionamento;
-    private Foto foto;
-
-
-    public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, String telefone, String horarioFuncionamento) {
-    	setNome(nome);
-    	setTipoEstabelecimento(tipoEstabelecimento);
-    	setTelefone(telefone);
-    	setHorarioFuncionamento(horarioFuncionamento);
-    	
-    }
-    
-    public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj, String email, String telefone, String horarioFuncionamento, Foto foto) {
-        setId(id);
-        setNome(nome);
-        setTipoEstabelecimento(tipoEstabelecimento);
-        setEndereco(endereco);
-        setCnpj(cnpj);
-        setEmail(email);
-        setTelefone(telefone);
-        setHorarioFuncionamento(horarioFuncionamento);
-        setFoto(foto);
-    }
-    
-    
-    public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj, String email, String telefone, String horarioFuncionamento, Foto foto) {
-        setNome(nome);
-        setTipoEstabelecimento(tipoEstabelecimento);
-        setEndereco(endereco);
-        setCnpj(cnpj);
-        setEmail(email);
-        setTelefone(telefone);
-        setHorarioFuncionamento(horarioFuncionamento);
-        setFoto(foto);
-    }
-    
-    public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj, String email, String telefone, String horarioFuncionamento) {
-        setNome(nome);
-        setTipoEstabelecimento(tipoEstabelecimento);
-        setEndereco(endereco);
-        setCnpj(cnpj);
-        setEmail(email);
-        setTelefone(telefone);
-        setHorarioFuncionamento(horarioFuncionamento);
-    }
-
-    public Estabelecimento() {
-		
+	private Long id;
+	private String nome;
+	private TipoEstabelecimento tipoEstabelecimento;
+	private Endereco endereco;
+	private String cnpj;
+	private String email;
+	private String telefone;
+	private Time horarioAbertura;
+	
+	
+	public Usuario getUsuario() {
+		return usuario;
 	}
 
-	public Estabelecimento(String nome, String telefone, String email) {
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	private Time horarioFechamento;
+	private Foto foto;
+	private Usuario usuario;
+
+	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco,
+			String cnpj, String email, String telefone, Time horarioAbertura, Time horarioFechamento) {
+		setId(id);
 		setNome(nome);
+		setTipoEstabelecimento(tipoEstabelecimento);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+
+	}
+
+	public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, String telefone, Time horarioAbertura,
+			Time horarioFechamento) {
+		setNome(nome);
+		setTipoEstabelecimento(tipoEstabelecimento);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+
+	}
+
+	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco,
+			String cnpj, String email, String telefone, Time horarioAbertura, Time horarioFechamento, Foto foto) {
+		setId(id);
+		setNome(nome);
+		setTipoEstabelecimento(tipoEstabelecimento);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+
+		setFoto(foto);
+	}
+
+	public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj,
+			String email, String telefone, Time horarioAbertura, Time horarioFechamento, Foto foto) {
+		setNome(nome);
+		setTipoEstabelecimento(tipoEstabelecimento);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+		setFoto(foto);
+	}
+
+	public Estabelecimento(String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco, String cnpj,
+			String email, String telefone, Time horarioAbertura, Time horarioFechamento) {
+		setNome(nome);
+		setTipoEstabelecimento(tipoEstabelecimento);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+	}
+
+	public Estabelecimento() {
+
+	}
+
+	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipo, Endereco endereco,
+			String cnpj, String email, String telefone) {
+
+		setId(id);
+		setNome(nome);
+		setTipoEstabelecimento(tipo);
+		setEndereco(endereco);
+		setCnpj(cnpj);
 		setEmail(email);
 		setTelefone(telefone);
 
 	}
 
-	public Estabelecimento(String nome, String telefone) {
-		// TODO Auto-generated constructor stub
+	public Estabelecimento(Long idEstabelecimento, String nome, TipoEstabelecimento tipo, String email,
+			String telefone) {
+		setId(idEstabelecimento);
+		setNome(nome);
+		setTipoEstabelecimento(tipo);
+		
+		setEmail(email);
+		setTelefone(telefone);
+	}
+
+	public Estabelecimento(String nome, String email, String telefone) {
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);
+	}
+
+	public Estabelecimento(Long id, String nome, String email, String telefone) {
+		setId(id);
+		setNome(nome);
+		setEmail(email);
+		setTelefone(telefone);
+		
+	}
+
+	public Estabelecimento(String nome, TipoEstabelecimento tipo, Endereco endereco, String cnpj, String email,
+			String telefone, Time horarioAbertura, Time horarioFechamento, Usuario usuario) {
+		
+		setNome(nome);
+		setTipoEstabelecimento(tipo);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+		setUsuario(usuario);
+		
+		
 	}
 
 	public Long getId() {
 
-        return id;
-    }
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getNome() {
-        return nome;
-    }
+	public String getNome() {
+		return nome;
+	}
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
-    public TipoEstabelecimento getTipoEstabelecimento() {
-        return tipoEstabelecimento;
-    }
+	public TipoEstabelecimento getTipoEstabelecimento() {
+		return tipoEstabelecimento;
+	}
 
-    public void setTipoEstabelecimento(TipoEstabelecimento tipoEstabelecimento) {
-        this.tipoEstabelecimento = tipoEstabelecimento;
-    }
+	public void setTipoEstabelecimento(TipoEstabelecimento tipoEstabelecimento) {
+		this.tipoEstabelecimento = tipoEstabelecimento;
+	}
 
-    public Endereco getEndereco() {
-        return endereco;
-    }
+	public Endereco getEndereco() {
+		return endereco;
+	}
 
-    public void setEndereco(Endereco endereco) {
-        this.endereco = endereco;
-    }
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
 
-    public String getCnpj() {
-        return cnpj;
-    }
+	public String getCnpj() {
+		return cnpj;
+	}
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
-    }
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getTelefone() {
-        return telefone;
-    }
+	public String getTelefone() {
+		return telefone;
+	}
 
-    public void setTelefone(String telefone) {
-        this.telefone = telefone;
-    }
+	public void setTelefone(String telefone) {
+		this.telefone = telefone;
+	}
 
-    public String getHorarioFuncionamento() {
-        return horarioFuncionamento;
-    }
+	public Time getHorarioAbertura() {
+		return horarioAbertura;
+	}
 
-    public void setHorarioFuncionamento(String horarioFuncionamento) {
-        this.horarioFuncionamento = horarioFuncionamento;
-    }
+	public void setHorarioAbertura(Time horarioAbertura) {
+		this.horarioAbertura = horarioAbertura;
+	}
 
-    public Foto getFoto() {
-        return foto;
-    }
+	public Time getHorarioFechamento() {
+		return horarioFechamento;
+	}
 
-    public void setFoto(Foto foto) {
-        this.foto = foto;
-    }
+	public void setHorarioFechamento(Time horarioFechamento) {
+		this.horarioFechamento = horarioFechamento;
+	}
+
+	public Foto getFoto() {
+		return foto;
+	}
+
+	public void setFoto(Foto foto) {
+		this.foto = foto;
+	}
 }

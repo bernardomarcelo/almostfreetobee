@@ -5,6 +5,8 @@
     <title>Perfil do Estabelecimento</title>
 </head>
 <body>
+	
+	<h1>${estabelecimento.foto.conteudoFoto}</h1>
     <h1>${estabelecimento.nome}</h1>
     
     <h2><strong>Endereço</strong></h2>

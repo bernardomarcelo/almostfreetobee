@@ -188,11 +188,56 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 	}
 
 	@Override
-	public List<Estabelecimento> recuperarEstabelecimentoUnico(Long id){
+	public Estabelecimento recuperarEstabelecimentoUnico(Long id){
 	
-		ArrayList<Estabelecimento>estabelecimentoRecuperado = new ArrayList<>();
+		try {
+			this.conexao = ConexaoFactory.getConnection();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+		    }
 	
-		return estabelecimentoRecuperado;
+		Estabelecimento estabelecimento = null;
+		Endereco endereco = null;
+		Foto foto = null;
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conexao.prepareStatement("SELECT estabelecimento.*, foto.*, endereco.* "
+					+ "FROM foto "
+					+ "INNER JOIN estabelecimento"
+					+ "ON estabelecimento.id_foto = foto.id_foto"
+					+ "INNER JOIN endereco"
+					+ "ON estabelecimento.id_endereco = endereco.id_endereco;");
+		
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				estabelecimento = new Estabelecimento();
+				
+				estabelecimento.setId(rs.getLong("id_estabelecimento"));
+	            estabelecimento.setNome(rs.getString("nome_estabelecimento"));
+	          	estabelecimento.setCnpj(rs.getString("cnpj_estabelecimento"));
+	            estabelecimento.setEmail(rs.getString("email_estabelecimento"));
+	            estabelecimento.setTelefone(rs.getString("telefone_estabelecimento"));
+	        
+	            endereco = new Endereco();
+	            endereco.setId(rs.getLong("id_endereco"));
+	            endereco.setEstado(rs.getString("estado_endereco"));
+	            endereco.setCidade(rs.getString("cidade_endereco"));
+	            endereco.setCep(rs.getString("cep_endereco"));
+	            endereco.setLogradouro(rs.getString("logradouro_endereco"));
+	            
+	            foto = new Foto();
+	            foto.setId(rs.getLong("id_foto"));
+	            foto.setConteudoFoto(rs.getBytes("conteudo_foto"));
+	            foto.setExtensaoFoto(rs.getString("extensao_foto"));
+			}
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return estabelecimento;
 	}
 	
 	
@@ -308,17 +353,6 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		return estabelecimentosRecuperados;
 	}
 	
-	@Override
-	public List<Estabelecimento> recuperarEstabelecimentosPelaAvaliacao() {
-		List<Estabelecimento> estabelecimentos = new ArrayList<>();
-		
-		PreparedStatement stmt = null;
-		
-		try {
-			stmt = conexao.prepareStatement("SELECT estabelecimento.* FROM avaliacao INNER JOIN estabelecimento ON estabelecimento.id_estabelecimento = avaliacao.id_estabelecimento")
-		}
-		return null;
-	}
 
 
 }

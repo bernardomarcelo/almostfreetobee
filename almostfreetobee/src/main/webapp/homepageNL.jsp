@@ -44,8 +44,10 @@
             <div id="lista-depoimentos" class="depoimentos">
             <c:forEach var="depoimento" items="${depoimentos}"/>
 					<div>
-						<p><c:out value="${depoimento.foto}"/></p>
-						<h1><c:out value="${depoimento.nome}"/></h1>			
+						<p><c:out value="${depoimento.usuario.foto}"/></p>
+						<h1><c:out value="${depoimento.usuario.nome}"/></h1>
+						<h2><c:out value="${depoimento.conteudoDepoimento}"/></h2>
+						<h2><c:out value="${depoimento.avalicao}"/></h2>			
 					</div>
                 
             </div>        
