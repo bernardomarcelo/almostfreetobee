@@ -14,9 +14,12 @@ import javax.servlet.http.HttpSession;
 
 import modelo.dao.avaliacao.AvaliacaoDAO;
 import modelo.dao.avaliacao.AvaliacaoDAOImpl;
+import modelo.dao.estabelecimento.EstabelecimentoDAO;
+import modelo.dao.estabelecimento.EstabelecimentoDAOImpl;
 import modelo.dao.usuario.UsuarioDAO;
 import modelo.dao.usuario.UsuarioDAOImpl;
 import modelo.entidade.avaliacao.Avaliacao;
+import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.entidade.usuario.Usuario;
 
 //@WebServlet(urlPatterns = { "/almostfreetobee/cadastrar", "/almostfreetobee", "/sair" })
@@ -26,10 +29,12 @@ public class UsuarioServlet extends HttpServlet {
 	// private static final long serialVersionUID = 1L;
 	private UsuarioDAO dao;
 	private AvaliacaoDAO daoAvaliacao;
+	private EstabelecimentoDAO daoEstabelecimento;
 
 	public void init() {
 		dao = new UsuarioDAOImpl();
-		daoAvaliacao = new AvaliacaoDAOImpl();		
+		daoAvaliacao = new AvaliacaoDAOImpl();	
+		daoEstabelecimento = new EstabelecimentoDAOImpl();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -76,6 +81,10 @@ public class UsuarioServlet extends HttpServlet {
 		case "/exibir-avaliacoes":
 			exibirAvaliacoesUsuario(request, response);
 			break;
+			
+		case "/exibir-estabelecimentos":
+			exibirEstabelecimentosUsuario(request,response);
+			break;
 
 		/*
 		 * case "/entrar": conectarUsuario(request, response); break;
@@ -88,6 +97,29 @@ public class UsuarioServlet extends HttpServlet {
 			break;
 		}
 
+	}
+
+	private void exibirEstabelecimentosUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		HttpSession session = request.getSession(false);
+
+		if (session == null || session.getAttribute("usuarioLogado") == null) {
+			response.sendRedirect("login");
+			return;
+		}
+
+		Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+		Long id = usuarioLogado.getId();
+
+		request.setAttribute("usuario", usuarioLogado);
+		 List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentosUsuario(id);
+		    
+
+		    request.setAttribute("estabelecimentos", estabelecimentos);
+		
+		RequestDispatcher dispatcher = request.getRequestDispatcher("estabelecimentosUsuario.jsp");
+		dispatcher.forward(request, response);
+
+		
 	}
 
 	private void exibirAvaliacoesUsuario(HttpServletRequest request, HttpServletResponse response)

@@ -12,6 +12,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
+import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
 import modelo.entidade.foto.Foto;
@@ -50,20 +51,22 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					+ "telefone_estabelecimento, "
 					+ "horario_abertura_estabelecimento, "
 					+ "horario_fechamento_estabelecimento,"
-					
+					+ "id_usuario,"
 					
 					+ "id_endereco) "
-					+ "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+					+ "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			insertEstabelecimento.setString(1, estabelecimento.getNome());
 			insertEstabelecimento.setString(2, estabelecimento.getTipoEstabelecimento().toString()); // setString?
+			//insertEstabelecimento.setString(2, estabelecimento.getTipoEstabelecimento().name());
 			insertEstabelecimento.setString(3, estabelecimento.getCnpj());
 			insertEstabelecimento.setString(4, estabelecimento.getEmail());
 			insertEstabelecimento.setString(5, estabelecimento.getTelefone());
 			insertEstabelecimento.setTime(6, estabelecimento.getHorarioAbertura());
 			insertEstabelecimento.setTime(7, estabelecimento.getHorarioFechamento());
+			insertEstabelecimento.setLong(8, estabelecimento.getUsuario().getId());
 			
-			insertEstabelecimento.setLong(8, idEndereco);
+			insertEstabelecimento.setLong(9, idEndereco);
 
 			insertEstabelecimento.execute();
 			
@@ -340,6 +343,72 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		
 		return estabelecimentosRecuperados;
 	}
+
+	    @Override
+		public List<Estabelecimento> recuperarEstabelecimentosUsuario(Long usuarioId) {
+		List<Estabelecimento> estabelecimentos = new ArrayList<>();
+		PreparedStatement stmt = null;
+		ResultSet resultado = null;
+
+		String sql = "SELECT * FROM estabelecimento WHERE id_usuario = ?";
+
+		try {
+			stmt = conexao.prepareStatement(sql);
+			stmt.setLong(1, usuarioId);
+			resultado = stmt.executeQuery();
+			
+			 while (resultado.next()) {
+		            Long idEstabelecimento = resultado.getLong("id_estabelecimento");
+		            String nome = resultado.getString("nome_estabelecimento");
+		            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
+		            String cnpj = resultado.getString("cnpj_estabelecimento");
+		            String email = resultado.getString("email_estabelecimento");
+		            String telefone = resultado.getString("telefone_estabelecimento");
+
+		            /* NOVO: horários como Time
+		            Time horarioAbertura = resultado.getTime("horario_abertura_estabelecimento");
+		            Time horarioFechamento = resultado.getTime("horario_fechamento_estabelecimento");
+					*/
+		         //   Long idFoto = resultado.getLong("id_foto");
+		          //  String nomeArquivo = resultado.getString("caminho_arquivo_foto");
+		           // byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
+		          //  Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
+
+		          /*  Long idEndereco = resultado.getLong("id_endereco_estabelecimento");                
+		            String estado = resultado.getString("estado_endereco");
+		            String cidade = resultado.getString("cidade_endereco");
+		            String bairro = resultado.getString("bairro_endereco");
+		            String cep = resultado.getString("cep_endereco");
+		           */ //String logradouro = resultado.getString("logradouro_endereco");                         
+		            //Endereco endereco = new Endereco(idEndereco, estado, cidade, bairro, cep, logradouro);
+
+		            estabelecimentos.add(
+		            		new Estabelecimento(idEstabelecimento, nome, tipo, email, telefone));
+		            
+				            
+
+		}
+		}catch (SQLException e) {
+			e.printStackTrace();
+
+		} finally {
+
+			try {
+				if (resultado != null)
+					resultado.close();
+				if (stmt != null)
+					stmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return estabelecimentos;
+	
+	
+	    }	
+	
 	
 	}
 	

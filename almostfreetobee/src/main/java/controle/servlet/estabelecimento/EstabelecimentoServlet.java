@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import modelo.dao.avaliacao.AvaliacaoDAO;
 import modelo.dao.avaliacao.AvaliacaoDAOImpl;
@@ -21,6 +22,7 @@ import modelo.dao.estabelecimento.EstabelecimentoDAOImpl;
 import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
+import modelo.entidade.usuario.Usuario;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 @WebServlet(urlPatterns = { "/estabelecimento/exibir-perfil", "/estabelecimento/novo", "/estabelecimento/cadastrar", "/estabelecimento/listar", "/estabelecimento/pesquisar-estabelecimento", "/estabelecimento/realizar-pesquisa" })
 //@WebServlet("/estabelecimento/*")
@@ -127,6 +129,19 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 	private void inserirEstabelecimento(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		
+		HttpSession session = request.getSession(false);
+		
+		if (session == null || session.getAttribute("usuarioLogado") == null) {
+		    response.sendRedirect("login");
+		    return;
+		}
+		
+			Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
+			
+				request.setAttribute("usuario", usuarioLogado);
+		
+		
+		
 		String nome = request.getParameter("nome");
 		String tipoString = request.getParameter("tipo");
 		TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(tipoString.toUpperCase());
@@ -144,7 +159,7 @@ public class EstabelecimentoServlet extends HttpServlet {
 		String aberturaStr = request.getParameter("abertura"); 
 		String fechamentoStr = request.getParameter("fechamento");
 
-		Time horarioAbertura = Time.valueOf(aberturaStr + ":00"); 
+		Time horarioAbertura = Time.valueOf(aberturaStr + ":00"); 					
 		Time horarioFechamento = Time.valueOf(fechamentoStr + ":00");	
 		String telefone = request.getParameter("telefone");
 		String email = request.getParameter("email");
@@ -152,7 +167,7 @@ public class EstabelecimentoServlet extends HttpServlet {
 		daoEndereco.inserirEndereco(endereco);
 		Long idEndereco = endereco.getId();
 
-		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura, horarioFechamento);
+		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura, horarioFechamento, usuarioLogado);
 		daoEstabelecimento.inserirEstabelecimento(estabelecimento, idEndereco);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/PaginaVerificacao.jsp");
 		dispatcher.forward(request, response);

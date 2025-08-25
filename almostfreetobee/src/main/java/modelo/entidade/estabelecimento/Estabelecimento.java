@@ -4,6 +4,7 @@ import java.sql.Time;
 
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.foto.Foto;
+import modelo.entidade.usuario.Usuario;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 
 public class Estabelecimento {
@@ -16,8 +17,19 @@ public class Estabelecimento {
 	private String email;
 	private String telefone;
 	private Time horarioAbertura;
+	
+	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	private Time horarioFechamento;
 	private Foto foto;
+	private Usuario usuario;
 
 	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco,
 			String cnpj, String email, String telefone, Time horarioAbertura, Time horarioFechamento) {
@@ -92,7 +104,7 @@ public class Estabelecimento {
 
 		setId(id);
 		setNome(nome);
-		setTipoEstabelecimento(tipoEstabelecimento);
+		setTipoEstabelecimento(tipo);
 		setEndereco(endereco);
 		setCnpj(cnpj);
 		setEmail(email);
@@ -102,9 +114,9 @@ public class Estabelecimento {
 
 	public Estabelecimento(Long idEstabelecimento, String nome, TipoEstabelecimento tipo, String email,
 			String telefone) {
-		setId(id);
+		setId(idEstabelecimento);
 		setNome(nome);
-		setTipoEstabelecimento(tipoEstabelecimento);
+		setTipoEstabelecimento(tipo);
 		
 		setEmail(email);
 		setTelefone(telefone);
@@ -121,6 +133,22 @@ public class Estabelecimento {
 		setNome(nome);
 		setEmail(email);
 		setTelefone(telefone);
+		
+	}
+
+	public Estabelecimento(String nome, TipoEstabelecimento tipo, Endereco endereco, String cnpj, String email,
+			String telefone, Time horarioAbertura, Time horarioFechamento, Usuario usuario) {
+		
+		setNome(nome);
+		setTipoEstabelecimento(tipo);
+		setEndereco(endereco);
+		setCnpj(cnpj);
+		setEmail(email);
+		setTelefone(telefone);
+		setHorarioAbertura(horarioAbertura);
+		setHorarioFechamento(horarioFechamento);
+		setUsuario(usuario);
+		
 		
 	}
 

@@ -17,8 +17,9 @@
 
 <p>Pesquise um estabelecimento!<a href='/almostfreetobee/estabelecimento/pesquisar-estabelecimento'>Veja Estabelecimentos!!</a></p> <br> <br>
 
-<p>Veja suas avaliações!<a href='/almostfreetobee/exibir-avaliacoes'>Suas avaliações!!</a></p>
+<p>Veja suas avaliações!<a href='/almostfreetobee/exibir-avaliacoes'>Suas avaliações!!</a></p> <br> <br>
 
+<p>Veja seus estabelecimentos!<a href='/almostfreetobee/exibir-estabelecimentos'>Seus estabelecimentos!!</a></p>
 
 </body>
 </html>

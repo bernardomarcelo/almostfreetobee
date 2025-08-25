@@ -68,7 +68,7 @@ public class AvaliacaoServlet extends HttpServlet {
 				exibirAvaliacao(request, response);
 				break;
 
-			case "avaliacao/listar-":
+			case "/avaliacao/listar":
 				listarAvaliacoes(request, response);
 				break;
 
