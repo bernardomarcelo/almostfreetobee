@@ -208,4 +208,40 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
         return usuarios;
     }
+
+	@Override
+	public byte[] recuperarFotoUsuario(Long id) {
+		ResultSet rs = null;
+        PreparedStatement stmt = null;
+        String sql = "SELECT f.conteudo_foto " +
+                "FROM usuario u " +
+                "JOIN foto f ON u.id_foto = f.id_foto " +
+                "WHERE u.id_usuario = ?";
+        try {
+            stmt = conexao.prepareStatement(sql);
+           
+            
+            stmt.setLong(1, id);
+            rs = stmt.executeQuery();
+            
+            if(rs.next()) {
+            	return rs.getBytes("conteudo_foto");
+            }
+            		
+        }catch(SQLException e) {
+        	e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null)
+                    rs.close();
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+		
+		return null;
+	}
 }

@@ -5,8 +5,17 @@
 
 <head>
   <title>Perfil Usuario</title>
+  
+  <style>
+  
+  .foto { width:350 ;height: 250}
+  
+  
+  
+  
+  </style>
+  
 </head>
-
 <body>
   <h1>
     <div style="text-align: center;">
@@ -22,6 +31,7 @@
   <div style="text-align: center;">
     <div style="display: flex; flex-direction: column; align-items: center;">
 
+	<img class ="foto" src="foto?tipo=usuario&id=${usuario.id}" alt="Foto do Usuário"/>
       <p><strong>Nome:</strong> ${usuario.nome}</p>
       <p><strong>Sobrenome:</strong> ${usuario.sobrenome}</p>
       <p><strong>Pronome:</strong> ${usuario.pronome}</p>

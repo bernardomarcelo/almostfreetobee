@@ -39,5 +39,7 @@ public interface EstabelecimentoDAO {
 		List<Estabelecimento> recuperarEstabelecimentos();
 		
 		List<Estabelecimento> recuperarEstabelecimentosUsuario(Long usuarioId);
+		
+		byte[] recuperarFotoEstabelecimento(Long id);
 
 }

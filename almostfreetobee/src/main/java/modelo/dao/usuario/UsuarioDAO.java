@@ -17,6 +17,8 @@
 	    Usuario buscarPorEmailESenha(String email, String senha);
 	
 	    List<Usuario> recuperarUsuarios();
+	    
+	    byte[] recuperarFotoUsuario(Long id);
 	
 	
 	

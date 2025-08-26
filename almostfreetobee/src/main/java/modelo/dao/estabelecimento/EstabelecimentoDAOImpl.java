@@ -407,7 +407,12 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 		return estabelecimentos;
 	
 	
-	    }	
+	    }
+
+		public byte[] recuperarFotoEstabelecimento(Long id) {
+			// TODO Auto-generated method stub
+			return null;
+		}	
 	
 	
 	}
