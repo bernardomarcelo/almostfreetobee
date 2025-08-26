@@ -1,27 +1,34 @@
 package controle.servlet.usuario;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import modelo.dao.avaliacao.AvaliacaoDAO;
 import modelo.dao.avaliacao.AvaliacaoDAOImpl;
 import modelo.dao.estabelecimento.EstabelecimentoDAO;
 import modelo.dao.estabelecimento.EstabelecimentoDAOImpl;
+import modelo.dao.foto.FotoDAO;
+import modelo.dao.foto.FotoDAOImpl;
 import modelo.dao.usuario.UsuarioDAO;
 import modelo.dao.usuario.UsuarioDAOImpl;
 import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.estabelecimento.Estabelecimento;
+import modelo.entidade.foto.Foto;
 import modelo.entidade.usuario.Usuario;
 
+@MultipartConfig
 //@WebServlet(urlPatterns = { "/almostfreetobee/cadastrar", "/almostfreetobee", "/sair" })
 @WebServlet("/")
 public class UsuarioServlet extends HttpServlet {
@@ -30,11 +37,13 @@ public class UsuarioServlet extends HttpServlet {
 	private UsuarioDAO dao;
 	private AvaliacaoDAO daoAvaliacao;
 	private EstabelecimentoDAO daoEstabelecimento;
+	private FotoDAO daoFoto;
 
 	public void init() {
 		dao = new UsuarioDAOImpl();
-		daoAvaliacao = new AvaliacaoDAOImpl();	
+		daoAvaliacao = new AvaliacaoDAOImpl();
 		daoEstabelecimento = new EstabelecimentoDAOImpl();
+		daoFoto = new FotoDAOImpl();
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -81,9 +90,9 @@ public class UsuarioServlet extends HttpServlet {
 		case "/exibir-avaliacoes":
 			exibirAvaliacoesUsuario(request, response);
 			break;
-			
+
 		case "/exibir-estabelecimentos":
-			exibirEstabelecimentosUsuario(request,response);
+			exibirEstabelecimentosUsuario(request, response);
 			break;
 
 		/*
@@ -99,7 +108,8 @@ public class UsuarioServlet extends HttpServlet {
 
 	}
 
-	private void exibirEstabelecimentosUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	private void exibirEstabelecimentosUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 		HttpSession session = request.getSession(false);
 
 		if (session == null || session.getAttribute("usuarioLogado") == null) {
@@ -111,15 +121,13 @@ public class UsuarioServlet extends HttpServlet {
 		Long id = usuarioLogado.getId();
 
 		request.setAttribute("usuario", usuarioLogado);
-		 List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentosUsuario(id);
-		    
+		List<Estabelecimento> estabelecimentos = daoEstabelecimento.recuperarEstabelecimentosUsuario(id);
 
-		    request.setAttribute("estabelecimentos", estabelecimentos);
-		
+		request.setAttribute("estabelecimentos", estabelecimentos);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("estabelecimentosUsuario.jsp");
 		dispatcher.forward(request, response);
 
-		
 	}
 
 	private void exibirAvaliacoesUsuario(HttpServletRequest request, HttpServletResponse response)
@@ -136,11 +144,10 @@ public class UsuarioServlet extends HttpServlet {
 		Long id = usuarioLogado.getId();
 
 		request.setAttribute("usuario", usuarioLogado);
-		 List<Avaliacao> avaliacoes = daoAvaliacao.recuperarAvaliacoesUsuario(id);
-		    
+		List<Avaliacao> avaliacoes = daoAvaliacao.recuperarAvaliacoesUsuario(id);
 
-		    request.setAttribute("avaliacoes", avaliacoes);
-		
+		request.setAttribute("avaliacoes", avaliacoes);
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher("AvaliacoesUsuario.jsp");
 		dispatcher.forward(request, response);
 
@@ -169,14 +176,33 @@ public class UsuarioServlet extends HttpServlet {
 
 	}
 
-	private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void cadastrarUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
 
 		String nome = request.getParameter("nome");
 		String sobrenome = request.getParameter("sobrenome");
 		String apelido = request.getParameter("apelido");
 		String email = request.getParameter("email");
 		String senha = request.getParameter("senha");
-		dao.inserirUsuario(new Usuario(nome, sobrenome, apelido, email, senha));
+		
+
+		Part parteFoto = request.getPart("foto");
+		if (parteFoto != null && parteFoto.getSize() > 0) {
+			try (InputStream is = parteFoto.getInputStream()) {
+				byte[] conteudoFoto = is.readAllBytes();
+
+				String nomeArquivo = parteFoto.getSubmittedFileName();
+				String extensaoFoto = "";
+				if (nomeArquivo != null && nomeArquivo.contains(".")) {
+					extensaoFoto = nomeArquivo.substring(nomeArquivo.lastIndexOf('.') + 1).toLowerCase();
+				}
+
+				Foto foto = new Foto(conteudoFoto, extensaoFoto);
+				daoFoto.adicionarFoto(foto);
+				dao.inserirUsuario(new Usuario(nome, sobrenome, apelido, email, senha, foto));
+			}
+		}
+
 		response.sendRedirect("login");
 	}
 

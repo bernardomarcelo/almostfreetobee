@@ -7,7 +7,7 @@
 <body>
     <h2><%= "Cadastrar Usuario" %></h2>
 
-    <form action='cadastrar' method="post">
+    <form action='cadastrar' method="post" enctype="multipart/form-data" novalidate>
         <label for="nome">Nome:</label><br>
         <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required><br><br>
 
@@ -22,8 +22,21 @@
 
         <label for="senha">Senha:</label><br>
         <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required><br><br>
+        
+        <label for="foto">Insira sua foto:</label> <br> <br>
+     <input type="file" id="foto" name="foto" accept="image/*" /> <br> <br>
+    
+    
+    
+    
+    <input type="submit" value="Cadastrar">
 
-        <input type="submit" value="Cadastrar">
+        
     </form>
+    
+    
+    
+    
+   
 </body>
 </html>

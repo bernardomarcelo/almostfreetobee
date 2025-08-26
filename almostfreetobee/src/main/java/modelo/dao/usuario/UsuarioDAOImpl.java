@@ -32,7 +32,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
     public void inserirUsuario(Usuario usuario) {
         PreparedStatement stmt = null;
 
-        String sql = "INSERT INTO usuario (nome_usuario, sobrenome_usuario, apelido_usuario, email_usuario, senha_usuario) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO usuario (nome_usuario, sobrenome_usuario, apelido_usuario, email_usuario, senha_usuario, id_foto) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             stmt = conexao.prepareStatement(sql);
@@ -41,6 +41,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
             stmt.setString(3, usuario.getApelido());
             stmt.setString(4, usuario.getEmail());
             stmt.setString(5, usuario.getSenha());
+            stmt.setLong(6,usuario.getFoto().getId());
             stmt.executeUpdate();
 
         } catch (SQLException e) {

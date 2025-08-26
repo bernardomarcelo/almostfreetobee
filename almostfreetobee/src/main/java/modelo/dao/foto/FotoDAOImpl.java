@@ -14,7 +14,7 @@ public class FotoDAOImpl implements FotoDAO {
 			this.conexao = ConexaoFactory.getConnection();
 
 		} catch (Exception e) {
-
+			
 			e.printStackTrace();
 		}
     }
@@ -22,7 +22,7 @@ public class FotoDAOImpl implements FotoDAO {
     @Override
     public void adicionarFoto(Foto foto) {
 
-        String sql = "INSERT INTO foto (extensaoFoto, conteudoFoto) VALUES (?, ?)";
+        String sql = "INSERT INTO foto (extensao_foto, conteudo_foto) VALUES (?, ?)";
 
         try (
              PreparedStatement stmt = conexao.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -45,7 +45,7 @@ public class FotoDAOImpl implements FotoDAO {
     @Override
     public void deletarFoto(Foto foto) {
 
-        String sql = "DELETE FROM foto WHERE id = ?";
+        String sql = "DELETE FROM foto WHERE id_foto = ?";
 
         try (
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -67,7 +67,7 @@ public class FotoDAOImpl implements FotoDAO {
     @Override
     public void atualizarFoto(Foto foto) {
 
-        String sql = "UPDATE foto SET extensaoFoto = ?, conteudoFoto = ? WHERE id = ?";
+        String sql = "UPDATE foto SET extensao_foto = ?, conteudo_foto = ? WHERE id_foto = ?";
 
         try (
              PreparedStatement stmt = conexao.prepareStatement(sql)) {
@@ -91,7 +91,7 @@ public class FotoDAOImpl implements FotoDAO {
 
     @Override
     public Foto recuperarFoto(Foto foto)  {
-        String sql = "SELECT id, extensaoFoto, conteudoFoto FROM foto WHERE id = ?";
+        String sql = "SELECT id_foto, extensao_foto, conteudo_foto FROM foto WHERE id_foto = ?";
         Foto resultado = null;
 
         try (
@@ -102,9 +102,9 @@ public class FotoDAOImpl implements FotoDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     resultado = new Foto();
-                    resultado.setId(rs.getLong("id"));
-                    resultado.setExtensaoFoto(rs.getString("extensaoFoto"));
-                    resultado.setConteudoFoto(rs.getBytes("conteudoFoto"));
+                    resultado.setId(rs.getLong("id_foto"));
+                    resultado.setExtensaoFoto(rs.getString("extensao_foto"));
+                    resultado.setConteudoFoto(rs.getBytes("conteudo_foto"));
                 } else {
                     System.out.println("Nenhuma foto encontrada com o ID fornecido.");
                 }

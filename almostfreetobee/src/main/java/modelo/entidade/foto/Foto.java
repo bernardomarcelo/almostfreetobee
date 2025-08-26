@@ -10,6 +10,12 @@ public class Foto {
         setConteudoFoto(conteudoFoto);
         setExtensaoFoto(extensaoFoto);
     }
+    
+    public Foto(byte[] conteudoFoto, String extensaoFoto){
+        
+        setConteudoFoto(conteudoFoto);
+        setExtensaoFoto(extensaoFoto);
+    }
 
     public Foto() {
 

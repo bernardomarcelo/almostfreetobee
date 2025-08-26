@@ -77,7 +77,19 @@ public class Usuario {
         setSenha(senha);
     }
 
-    public Long getId() {
+    public Usuario(String nome, String sobrenome, String apelido, String email, String senha, Foto foto) {
+		
+    	setNome(nome);
+    	setSobrenome(sobrenome);
+    	setApelido(apelido);
+    	setEmail(email);
+    	setSenha(senha);
+    	setFoto(foto);
+	}
+
+
+
+	public Long getId() {
         return id;
     }
 
