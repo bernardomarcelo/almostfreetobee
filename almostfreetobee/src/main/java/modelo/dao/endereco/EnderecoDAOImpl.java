@@ -51,7 +51,7 @@ private Connection conexao;
 			insertEndereco.setString(4, endereco.getCep());
 			insertEndereco.setString(5, endereco.getLogradouro());
 
-			insertEndereco.execute();
+			insertEndereco.executeUpdate();
 			
 
 			ResultSet chavePrimariaEndereco = insertEndereco.getGeneratedKeys();
@@ -73,8 +73,7 @@ private Connection conexao;
 				if (insertEndereco != null)
 					insertEndereco.close();
 
-				if (conexao != null)
-					conexao.close();
+				
 
 			} catch (SQLException erro) {
 

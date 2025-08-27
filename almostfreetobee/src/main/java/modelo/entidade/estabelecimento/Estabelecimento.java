@@ -17,6 +17,9 @@ public class Estabelecimento {
 	private String email;
 	private String telefone;
 	private Time horarioAbertura;
+	private Time horarioFechamento;
+	private Foto foto;
+	private Usuario usuario;
 	
 	
 	public Usuario getUsuario() {
@@ -27,9 +30,7 @@ public class Estabelecimento {
 		this.usuario = usuario;
 	}
 
-	private Time horarioFechamento;
-	private Foto foto;
-	private Usuario usuario;
+	
 
 	public Estabelecimento(Long id, String nome, TipoEstabelecimento tipoEstabelecimento, Endereco endereco,
 			String cnpj, String email, String telefone, Time horarioAbertura, Time horarioFechamento) {
@@ -137,7 +138,7 @@ public class Estabelecimento {
 	}
 
 	public Estabelecimento(String nome, TipoEstabelecimento tipo, Endereco endereco, String cnpj, String email,
-			String telefone, Time horarioAbertura, Time horarioFechamento, Usuario usuario) {
+			String telefone, Time horarioAbertura, Time horarioFechamento, Usuario usuario, Foto foto) {
 		
 		setNome(nome);
 		setTipoEstabelecimento(tipo);
@@ -148,6 +149,7 @@ public class Estabelecimento {
 		setHorarioAbertura(horarioAbertura);
 		setHorarioFechamento(horarioFechamento);
 		setUsuario(usuario);
+		setFoto(foto);
 		
 		
 	}

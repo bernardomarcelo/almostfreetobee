@@ -53,8 +53,8 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 					+ "horario_fechamento_estabelecimento,"
 					+ "id_usuario,"
 					
-					+ "id_endereco) "
-					+ "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+					+ "id_endereco, id_foto) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
 			insertEstabelecimento.setString(1, estabelecimento.getNome());
 			insertEstabelecimento.setString(2, estabelecimento.getTipoEstabelecimento().toString()); // setString?
@@ -65,6 +65,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 			insertEstabelecimento.setTime(6, estabelecimento.getHorarioAbertura());
 			insertEstabelecimento.setTime(7, estabelecimento.getHorarioFechamento());
 			insertEstabelecimento.setLong(8, estabelecimento.getUsuario().getId());
+			insertEstabelecimento.setLong(10,estabelecimento.getFoto().getId());
 			
 			insertEstabelecimento.setLong(9, idEndereco);
 
@@ -195,38 +196,61 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 	}
 
 	@Override
-	public Estabelecimento recuperarEstabelecimentoUnico(Long id){
-	
-		  Estabelecimento estabelecimento = null;
-		    String sql = "SELECT * FROM estabelecimento WHERE id_estabelecimento = ?";
-
-		    PreparedStatement stmt = null;
-		    try  {
-				stmt = conexao.prepareStatement(sql);
-
-		        stmt.setLong(1, id);
-		        ResultSet rs = stmt.executeQuery();
-
-
-		        if (rs.next()) {
-		            estabelecimento = new Estabelecimento();
-
-		            estabelecimento.setId(rs.getLong("id_estabelecimento"));
-		            estabelecimento.setNome(rs.getString("nome_estabelecimento"));
-		           String tipoStr = rs.getString("tipo_estabelecimento");
-		            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(tipoStr.toUpperCase());
-		            estabelecimento.setTipoEstabelecimento(tipo);
-
-		            estabelecimento.setCnpj(rs.getString("cnpj_estabelecimento"));
-		            estabelecimento.setEmail(rs.getString("email_estabelecimento"));
-		            estabelecimento.setTelefone(rs.getString("telefone_estabelecimento"));
-		        }
-		        
-		    } catch (SQLException e) {
-		        e.printStackTrace();
+public Estabelecimento recuperarEstabelecimentoUnico(Long id){
+		
+		try {
+			this.conexao = ConexaoFactory.getConnection();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
 		    }
-		    return estabelecimento;
-		}
+	
+		Estabelecimento estabelecimento = null;
+		Endereco endereco = null;
+		Foto foto = null;
+		
+		PreparedStatement stmt = null;
+		
+		try {
+			stmt = conexao.prepareStatement("SELECT estabelecimento.*, foto.*, endereco.* "
+					+ "FROM foto "
+					+ "INNER JOIN estabelecimento "
+					+ "ON estabelecimento.id_foto = foto.id_foto "
+					+ "INNER JOIN endereco "
+					+ "ON estabelecimento.id_endereco = endereco.id_endereco WHERE id_estabelecimento = ?;");
+		
+			 stmt.setLong(1, id);
+			ResultSet rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				estabelecimento = new Estabelecimento();
+				
+				estabelecimento.setId(rs.getLong("id_estabelecimento"));
+	            estabelecimento.setNome(rs.getString("nome_estabelecimento"));
+	          	estabelecimento.setCnpj(rs.getString("cnpj_estabelecimento"));
+	            String tipoStr = rs.getString("tipo_estabelecimento");
+	            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(tipoStr.toUpperCase());
+	            estabelecimento.setTipoEstabelecimento(tipo);
+	            estabelecimento.setEmail(rs.getString("email_estabelecimento"));
+	            estabelecimento.setTelefone(rs.getString("telefone_estabelecimento"));
+	        
+	            endereco = new Endereco();
+	            endereco.setId(rs.getLong("id_endereco"));
+	            endereco.setEstado(rs.getString("estado_endereco"));
+	            endereco.setCidade(rs.getString("cidade_endereco"));
+	            endereco.setCep(rs.getString("cep_endereco"));
+	            endereco.setLogradouro(rs.getString("logradouro_endereco"));
+	            
+	            foto = new Foto();
+	            foto.setId(rs.getLong("id_foto"));
+	            foto.setConteudoFoto(rs.getBytes("conteudo_foto"));
+	            foto.setExtensaoFoto(rs.getString("extensao_foto"));
+			}
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return estabelecimento;
+	}
 	
 	
 	
@@ -410,9 +434,39 @@ List<Estabelecimento>estabelecimentosRecuperados = new ArrayList<>();
 	    }
 
 		public byte[] recuperarFotoEstabelecimento(Long id) {
-			// TODO Auto-generated method stub
+			ResultSet rs = null;
+	        PreparedStatement stmt = null;
+	        String sql = "SELECT f.conteudo_foto " +
+	                "FROM estabelecimento e " +
+	                "JOIN foto f ON e.id_foto = f.id_foto " +
+	                "WHERE e.id_estabelecimento = ?";
+	        try {
+	            stmt = conexao.prepareStatement(sql);
+	           
+	            
+	            stmt.setLong(1, id);
+	            rs = stmt.executeQuery();
+	            
+	            if(rs.next()) {
+	            	return rs.getBytes("conteudo_foto");
+	            }
+	            		
+	        }catch(SQLException e) {
+	        	e.printStackTrace();
+	        } finally {
+	            try {
+	                if (rs != null)
+	                    rs.close();
+	                if (stmt != null)
+	                    stmt.close();
+	            } catch (SQLException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	        
+			
 			return null;
-		}	
+		}
 	
 	
 	}

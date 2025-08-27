@@ -2,16 +2,19 @@ package controle.servlet.estabelecimento;
 import java.sql.Time;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import modelo.dao.avaliacao.AvaliacaoDAO;
 import modelo.dao.avaliacao.AvaliacaoDAOImpl;
@@ -19,12 +22,16 @@ import modelo.dao.endereco.EnderecoDAO;
 import modelo.dao.endereco.EnderecoDAOImpl;
 import modelo.dao.estabelecimento.EstabelecimentoDAO;
 import modelo.dao.estabelecimento.EstabelecimentoDAOImpl;
+import modelo.dao.foto.FotoDAO;
+import modelo.dao.foto.FotoDAOImpl;
 import modelo.entidade.avaliacao.Avaliacao;
 import modelo.entidade.endereco.Endereco;
 import modelo.entidade.estabelecimento.Estabelecimento;
+import modelo.entidade.foto.Foto;
 import modelo.entidade.usuario.Usuario;
 import modelo.enumeracao.estabelecimento.TipoEstabelecimento;
 @WebServlet(urlPatterns = { "/estabelecimento/exibir-perfil", "/estabelecimento/novo", "/estabelecimento/cadastrar", "/estabelecimento/listar", "/estabelecimento/pesquisar-estabelecimento", "/estabelecimento/realizar-pesquisa" })
+@MultipartConfig
 //@WebServlet("/estabelecimento/*")
 public class EstabelecimentoServlet extends HttpServlet {
 	
@@ -32,12 +39,13 @@ public class EstabelecimentoServlet extends HttpServlet {
 	private EstabelecimentoDAO daoEstabelecimento;
 	private EnderecoDAO daoEndereco;
 	private AvaliacaoDAO daoAvaliacao;
+	private FotoDAO daoFoto;
 
 	public void init() {
 		daoEstabelecimento = new EstabelecimentoDAOImpl();
 		daoEndereco = new EnderecoDAOImpl();
 		daoAvaliacao = new AvaliacaoDAOImpl();
-	}
+		daoFoto = new FotoDAOImpl();	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -166,13 +174,29 @@ public class EstabelecimentoServlet extends HttpServlet {
 
 		daoEndereco.inserirEndereco(endereco);
 		Long idEndereco = endereco.getId();
+		Part parteFoto = request.getPart("foto");
+		if (parteFoto != null && parteFoto.getSize() > 0) {
+			try (InputStream is = parteFoto.getInputStream()) {
+				byte[] conteudoFoto = is.readAllBytes();
 
-		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura, horarioFechamento, usuarioLogado);
+				String nomeArquivo = parteFoto.getSubmittedFileName();
+				String extensaoFoto = "";
+				if (nomeArquivo != null && nomeArquivo.contains(".")) {
+					extensaoFoto = nomeArquivo.substring(nomeArquivo.lastIndexOf('.') + 1).toLowerCase();
+				}
+
+				Foto foto = new Foto(conteudoFoto, extensaoFoto);
+				daoFoto.adicionarFoto(foto);
+
+		Estabelecimento estabelecimento = new Estabelecimento(nome, tipo, endereco, cnpj, email, telefone, horarioAbertura, horarioFechamento, usuarioLogado, foto);
 		daoEstabelecimento.inserirEstabelecimento(estabelecimento, idEndereco);
+			}
+		}
+		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/PaginaVerificacao.jsp");
 		dispatcher.forward(request, response);
-	}
-
+	
+			}
 	private void exibirPerfil(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 	   
 		String idString = request.getParameter("id");

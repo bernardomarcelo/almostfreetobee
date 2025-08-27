@@ -8,6 +8,7 @@
     <title>Perfil do Estabelecimento</title>
 </head>
 <body>
+	<img class ="foto" src="${pageContext.request.contextPath}/foto?tipo=estabelecimento&id=${estabelecimento.id}" alt="Foto do Estabelecimento"/>
     <h1>${estabelecimento.nome}</h1>
     
     <h2><strong>Endereço</strong></h2>

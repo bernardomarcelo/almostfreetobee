@@ -10,7 +10,7 @@
 
 <h2>Free to Bee</h2>
 
-<form action ="cadastrar" method="post">
+<form action ="cadastrar" method="post" enctype="multipart/form-data" novalidate>
 
         <h3>Informações gerais</h3>
 	    <label>Nome do estabelecimento*</label>
@@ -65,7 +65,9 @@
     	<br>
 		<label>E-mail</label>
     	<input type="text" id="email" name="email" placeholder="" required>
-    	<br>
+    	<br> <br>
+    	 <label for="foto">Insira sua foto:</label> <br> <br>
+     <input type="file" id="foto" name="foto" accept="image/*" /> <br> <br>
 		<button type="submit">Salvar</button>
 		<button type="reset">Limpar Formulário</button>
 		
