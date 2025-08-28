@@ -14,6 +14,8 @@
     <ul>
         <c:forEach var="avaliacao" items="${avaliacoes}">
             <li>
+				${avaliacao.usuario.nome} <br>
+       			 ${avaliacao.estabelecimento.nome} <br>
                 <strong>Nota:</strong> ${avaliacao.nota} <br/>
                 <strong>Descrição:</strong> ${avaliacao.descricao} <br/> <br> <br>
                 

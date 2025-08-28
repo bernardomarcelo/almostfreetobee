@@ -86,13 +86,15 @@ public class EstabelecimentoServlet extends HttpServlet {
 				break;
 			
 			default:
-				RequestDispatcher dispatcher = request.getRequestDispatcher("/erro.jsp");
-				dispatcher.forward(request, response);
-				break;
+				//RequestDispatcher dispatcher = request.getRequestDispatcher("/erro.jsp");
+				//dispatcher.forward(request, response);
+				//break;
 			}
 
 		} catch (SQLException e) {
-			throw new ServletException(e);
+			e.printStackTrace();
+		    request.setAttribute("erro", e.getMessage());
+		    request.getRequestDispatcher("/erro.jsp").forward(request, response);
 		}
 	}
 	

@@ -196,7 +196,7 @@ public class EstabelecimentoDAOImpl implements EstabelecimentoDAO{
 	}
 
 	@Override
-public Estabelecimento recuperarEstabelecimentoUnico(Long id){
+	public Estabelecimento recuperarEstabelecimentoUnico(Long id){
 		
 		try {
 			this.conexao = ConexaoFactory.getConnection();
@@ -239,11 +239,16 @@ public Estabelecimento recuperarEstabelecimentoUnico(Long id){
 	            endereco.setCidade(rs.getString("cidade_endereco"));
 	            endereco.setCep(rs.getString("cep_endereco"));
 	            endereco.setLogradouro(rs.getString("logradouro_endereco"));
+	            estabelecimento.setEndereco(endereco);
+	            
 	            
 	            foto = new Foto();
+	            
 	            foto.setId(rs.getLong("id_foto"));
 	            foto.setConteudoFoto(rs.getBytes("conteudo_foto"));
 	            foto.setExtensaoFoto(rs.getString("extensao_foto"));
+	            estabelecimento.setFoto(foto);
+	            
 			}
 	        
 	    } catch (SQLException e) {
@@ -264,51 +269,56 @@ public Estabelecimento recuperarEstabelecimentoUnico(Long id){
 	    }
 
 	    List<Estabelecimento> estabelecimentosRecuperados = new ArrayList<>();
-	    PreparedStatement selectEstabelecimentos = null;
+	    Estabelecimento estabelecimento = null;
+		Endereco endereco = null;
+		Foto foto = null;
+	    PreparedStatement stmt = null;
+	    
 
 	    try {
-	        selectEstabelecimentos = conexao.prepareStatement(
-	            "SELECT * from estabelecimento"
-	        );
-
-	        ResultSet resultado = selectEstabelecimentos.executeQuery();
-
-	        while (resultado.next()) {
-	            Long idEstabelecimento = resultado.getLong("id_estabelecimento");
-	            String nome = resultado.getString("nome_estabelecimento");
-	            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(resultado.getString("tipo_estabelecimento"));
-	            String cnpj = resultado.getString("cnpj_estabelecimento");
-	            String email = resultado.getString("email_estabelecimento");
-	            String telefone = resultado.getString("telefone_estabelecimento");
-
-	            /* NOVO: horários como Time
-	            Time horarioAbertura = resultado.getTime("horario_abertura_estabelecimento");
-	            Time horarioFechamento = resultado.getTime("horario_fechamento_estabelecimento");
-				*/
-	         //   Long idFoto = resultado.getLong("id_foto");
-	          //  String nomeArquivo = resultado.getString("caminho_arquivo_foto");
-	           // byte[] conteudoFoto = resultado.getBytes("conteudo_foto");
-	          //  Foto foto = new Foto(idFoto, nomeArquivo, conteudoFoto);
-
-	          /*  Long idEndereco = resultado.getLong("id_endereco_estabelecimento");                
-	            String estado = resultado.getString("estado_endereco");
-	            String cidade = resultado.getString("cidade_endereco");
-	            String bairro = resultado.getString("bairro_endereco");
-	            String cep = resultado.getString("cep_endereco");
-	           */ //String logradouro = resultado.getString("logradouro_endereco");                         
-	            //Endereco endereco = new Endereco(idEndereco, estado, cidade, bairro, cep, logradouro);
-
-	            estabelecimentosRecuperados.add(
-	                new Estabelecimento(idEstabelecimento, nome, tipo, email, telefone)
-	            );
-	        }
-
-	    } catch (SQLException erro) {
-	    	StringWriter sw = new StringWriter();
-	    	PrintWriter pw = new PrintWriter(sw);
-	        erro.printStackTrace(pw);
-	        System.out.println(sw.toString());
-
+			stmt = conexao.prepareStatement("SELECT estabelecimento.*, foto.*, endereco.* "
+					+ "FROM foto "
+					+ "INNER JOIN estabelecimento "
+					+ "ON estabelecimento.id_foto = foto.id_foto "
+					+ "INNER JOIN endereco "
+					+ "ON estabelecimento.id_endereco = endereco.id_endereco;");
+		
+			 
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				estabelecimento = new Estabelecimento();
+				
+				estabelecimento.setId(rs.getLong("id_estabelecimento"));
+	            estabelecimento.setNome(rs.getString("nome_estabelecimento"));
+	          	estabelecimento.setCnpj(rs.getString("cnpj_estabelecimento"));
+	            String tipoStr = rs.getString("tipo_estabelecimento");
+	            TipoEstabelecimento tipo = TipoEstabelecimento.valueOf(tipoStr.toUpperCase());
+	            estabelecimento.setTipoEstabelecimento(tipo);
+	            estabelecimento.setEmail(rs.getString("email_estabelecimento"));
+	            estabelecimento.setTelefone(rs.getString("telefone_estabelecimento"));
+	        
+	            endereco = new Endereco();
+	            endereco.setId(rs.getLong("id_endereco"));
+	            endereco.setEstado(rs.getString("estado_endereco"));
+	            endereco.setCidade(rs.getString("cidade_endereco"));
+	            endereco.setCep(rs.getString("cep_endereco"));
+	            endereco.setLogradouro(rs.getString("logradouro_endereco"));
+	            estabelecimento.setEndereco(endereco);
+	            
+	            
+	            foto = new Foto();
+	        
+	            foto.setId(rs.getLong("id_foto"));
+	            foto.setConteudoFoto(rs.getBytes("conteudo_foto"));
+	            foto.setExtensaoFoto(rs.getString("extensao_foto"));
+	            estabelecimento.setFoto(foto);
+	            estabelecimentosRecuperados.add(estabelecimento);
+	            
+			}
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
 	    }
 
 	    return estabelecimentosRecuperados;

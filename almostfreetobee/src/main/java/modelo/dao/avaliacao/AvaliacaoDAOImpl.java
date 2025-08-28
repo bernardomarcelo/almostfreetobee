@@ -273,17 +273,24 @@ public class AvaliacaoDAOImpl implements AvaliacaoDAO {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT nota_avaliacao, descricao_avaliacao FROM avaliacao WHERE id_usuario = ?";
+		String sql = "SELECT u.nome_usuario, e.nome_estabelecimento,a.nota_avaliacao,a.descricao_avaliacao FROM avaliacao a INNER JOIN usuario u ON a.id_usuario = u.id_usuario INNER JOIN estabelecimento e ON a.id_estabelecimento = e.id_estabelecimento WHERE u.id_usuario = ?;";
 
 		try {
 			stmt = conexao.prepareStatement(sql);
 			stmt.setLong(1, usuarioId);
+			
 			rs = stmt.executeQuery();
 			
 			while (rs.next()) {
 				
 				Avaliacao avaliacao = new Avaliacao();
+				Usuario usuario = new Usuario();
+				Estabelecimento estabelecimento = new Estabelecimento();
 				
+				estabelecimento.setNome(rs.getString("nome_estabelecimento"));
+				usuario.setNome(rs.getString("nome_usuario"));
+				avaliacao.setUsuario(usuario);
+			    avaliacao.setEstabelecimento(estabelecimento);
 				avaliacao.setNota(rs.getInt("nota_avaliacao"));
 				avaliacao.setDescricao(rs.getString("descricao_avaliacao"));
 				

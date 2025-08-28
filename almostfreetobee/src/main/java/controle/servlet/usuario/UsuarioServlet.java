@@ -142,7 +142,9 @@ public class UsuarioServlet extends HttpServlet {
 
 		Usuario usuarioLogado = (Usuario) session.getAttribute("usuarioLogado");
 		Long id = usuarioLogado.getId();
-
+				
+		
+		
 		request.setAttribute("usuario", usuarioLogado);
 		List<Avaliacao> avaliacoes = daoAvaliacao.recuperarAvaliacoesUsuario(id);
 

@@ -8,6 +8,17 @@
 	<head>
 	<meta charset="UTF-8">
 	<title>Estabelecimentos</title>
+	
+	
+	<style>
+.foto {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+</style>
+	
 	</head>
 	<body>
 	
@@ -16,7 +27,7 @@
 	<ul>
 	    <c:forEach var="estabelecimento" items="${estabelecimentos}">
 	        <li>
-	            Nome: ${estabelecimento.nome} <br />
+	        	<img class ="foto" src="${pageContext.request.contextPath}/foto?tipo=estabelecimento&id=${estabelecimento.id}" alt="Foto do Estabelecimento"/> <br>
 	            Tipo de estabelecimento ${estabelecimento.tipoEstabelecimento} <br />
 	           	Logradouro: ${estabelecimento.endereco.logradouro} <br /><br />
 	        	Bairro: ${estabelecimento.endereco.bairro} <br /><br />
